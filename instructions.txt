@@ -16,12 +16,10 @@ docker run -it --rm -v "$(pwd)":/data 'continuumio/miniconda3:4.9.2' sh
 docker run -it --rm -v "$(pwd)":/data 'condaforge/mambaforge-pypy3:4.9.2-7' sh
 
 conda install -yS -c conda-forge -c anaconda --file /data/conda-requirements.txt
-mamba install -y --download-only -c conda-forge -c anaconda -c default --file /data/conda-requirements.txt
+mamba install -y -c conda-forge -c anaconda -c default --file /data/conda-requirements.txt
 mamba install -y -c conda-forge -c anaconda -c default --file /data/conda-requirements.txt
 mamba install -y --download-only -c conda-forge -c anaconda -c default --file /data/conda-requirements.txt && mamba install -y -c conda-forge -c anaconda -c default --file /data/conda-requirements.txt
 python3 -m pip install -U -r /data/pip-requirements.txt
-nano conda-requirements.txt
-nano pip-requirements.txt
 
 
 conda env export | head -n 8
@@ -31,9 +29,7 @@ conda env export --from-history | head -n 8
 
 docker run -it --rm -v "$(pwd)":/data 'condaforge/mambaforge-pypy3:4.9.2-7' bin/bash
 
-CHANNEL1=default
-CHANNEL2=conda-forge
-CHANNEL3=anaconda
+CHANNEL1=default CHANNEL2=conda-forge CHANNEL3=anaconda CHANNEL4=intel
 mamba create --name test -y --file /data/conda-requirements.txt -c $CHANNEL1 -c $CHANNEL2 -c $CHANNEL3 && \
 conda init bash && source ~/.bashrc && \
 source activate test && \
