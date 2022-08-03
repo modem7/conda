@@ -1,0 +1,1 @@
+DOCKER_BUILDKIT=1 docker build --rm --no-cache -t conda:test -f Dockerfilefull . && docker run -t 'conda:test'
