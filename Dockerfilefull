@@ -1,0 +1,25 @@
+# syntax = docker/dockerfile:latest
+# Image Size 2.7gb
+
+FROM condaforge/mambaforge-pypy3:4.9.2-7
+
+# System Envs
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+
+# Conda Env names
+ENV CONDAENV='test'
+ENV PYTHONSCRIPT='run.py'
+
+COPY pip-requirements.txt conda-requirements.txt environment.yml /
+
+# Create Env + install additional packages
+RUN mamba create --name $CONDAENV -y --file /conda-requirements.txt --channel default --channel anaconda --channel conda-forge && \
+    conda init bash && bash ~/.bashrc && . ~/.bashrc && \
+	conda activate $CONDAENV && python3 -m pip install --no-cache-dir -U pip setuptools wheel && python3 -m pip install -U -r /pip-requirements.txt && mamba install -y -c conda-forge -c anaconda -c default libgfortran5==9.3.0
+
+# Make RUN commands use the new environment:
+#SHELL ["conda", "run", "-n", "$CONDAENV", "/bin/bash", "-c"]
+
+ENTRYPOINT ["tini", "-g", "--"]
+#ENTRYPOINT ["tini", "-gv", "--", "/docker-entrypoint.sh"]
+#CMD ["conda", "run", "--no-capture-output", "-n", "$CODAENV", "python", "$PYTHONSCRIPT"]

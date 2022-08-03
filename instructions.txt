@@ -1,0 +1,109 @@
+https://uwekorn.com/2021/03/01/deploying-conda-environments-in-docker-how-to-do-it-right.html
+https://jcristharif.com/conda-docker-tips.html
+https://towardsdatascience.com/conda-pip-and-docker-ftw-d64fe638dc45
+https://gist.github.com/pangyuteng/f5b00fe63ac31a27be00c56996197597
+https://github.com/conda-archive/conda-docker/blob/master/condatest/linux-64-python3.6/Dockerfile
+https://github.com/LCOGT/docker-miniconda3/blob/master/Dockerfile
+
+https://pythonspeed.com/articles/conda-docker-image-size/
+
+
+
+conda create --name test python=3.8
+mamba create --name test -y --file /data/conda-requirements.txt --channel default --channel anaconda --channel conda-forge
+
+docker run -it --rm -v "$(pwd)":/data 'continuumio/miniconda3:4.9.2' sh
+docker run -it --rm -v "$(pwd)":/data 'condaforge/mambaforge-pypy3:4.9.2-7' sh
+
+conda install -yS -c conda-forge -c anaconda --file /data/conda-requirements.txt
+mamba install -y --download-only -c conda-forge -c anaconda -c default --file /data/conda-requirements.txt
+mamba install -y -c conda-forge -c anaconda -c default --file /data/conda-requirements.txt
+mamba install -y --download-only -c conda-forge -c anaconda -c default --file /data/conda-requirements.txt && mamba install -y -c conda-forge -c anaconda -c default --file /data/conda-requirements.txt
+python3 -m pip install -U -r /data/pip-requirements.txt
+nano conda-requirements.txt
+nano pip-requirements.txt
+
+
+conda env export | head -n 8
+conda env export --from-history | head -n 8
+
+#######
+
+docker run -it --rm -v "$(pwd)":/data 'condaforge/mambaforge-pypy3:4.9.2-7' bin/bash
+
+CHANNEL1=default
+CHANNEL2=conda-forge
+CHANNEL3=anaconda
+mamba create --name test -y --file /data/conda-requirements.txt -c $CHANNEL1 -c $CHANNEL2 -c $CHANNEL3 && \
+conda init bash && source ~/.bashrc && \
+source activate test && \
+conda config --append channels $CHANNEL2 && conda config --append channels $CHANNEL3 && \
+python3 -m pip install --no-cache-dir -U pip setuptools wheel && python3 -m pip install -U -r /data/pip-requirements.txt && \
+mamba env export --no-builds > /data/environment.yml && \
+mamba install -y libgfortran5==9.3.0 && \
+exit
+
+#######
+
+#### https://pythonspeed.com/articles/conda-docker-image-size/
+mamba env create --name test --file /data/environment.yml
+conda init bash && source ~/.bashrc && \
+source activate test && \
+mamba install -y -c conda-forge -c anaconda -c default libgfortran5==9.3.0 && \
+conda deactivate && \
+mamba install -y -c conda-forge conda-pack && \
+mkdir /data/pack && \
+conda-pack -n test -o /data/pack/env.tar && \
+chown -R 1000:users /data && \
+exit
+
+chown -R 1000:users /data
+
+
+mamba env create --name test --file /data/environment.yml
+
+
+mamba create --name test -y --file /data/environment.yml
+
+
+mamba install -y -c conda-forge -c anaconda -c default libgfortran4==7.5.0
+mamba install -y -c conda-forge -c anaconda -c default libgfortran5==9.3.0
+mamba install -y -c conda-forge -c anaconda -c default libgfortran-ng==9.3.0
+
+
+
+
+conda install --yes python==3.8
+conda env export > environment.yml
+
+
+Using requirements.txt with conda
+There's no problem at all using a requirements.txt file when creating a conda environment.
+
+In fact, you can also set additional channels at creation time:
+
+conda create --name my-env-name --file requirements.txt --channel <NAME_OF_CHANNEL>
+for example, in the case of the first package you mention, you can install it from anaconda channel. So you could run:
+
+conda create --name my-env-name --file requirements.txt --channel default --channel anaconda
+Why using default channel first? Well, just to give preference to the default one (the priority of channels is specified by the order they are listed: higher priority from left to right).
+
+When at least some of the packages are not available using conda
+Well, when no conda channel can provide any of your required packages, there are several alternatives:
+
+Install through conda those packages available in any of its channels.
+
+Install through pip the rest.
+
+Create a conda environment.yml file:
+
+ conda env export > environment.yml
+When you need to recreate this environment, then you can do:
+
+conda env create --name my-env-name --file environment.yml
+and it will install the packages using conda, will install pip, and then will install those packages only available with the latter one.
+
+This approach has good and bad properties:
+
+one of the good properties is that it separates those packages installed through conda from those installed using pip.
+one of the bad properties is that it's only useful for conda, but not for pip alone.
