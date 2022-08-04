@@ -21,6 +21,8 @@ channels:
   - defaults
   - conda-forge
   - anaconda
+  - intel
+  - fastchan
 pip_interop_enabled: True
 EOF
 
@@ -48,7 +50,6 @@ echo "### Activating environment and installing pip packages..."
 source activate $CONDAENV && \
 python3 -m pip install --root-user-action=ignore -U $PIPUPGRADE && \
 python3 -m pip install --root-user-action=ignore -U -r $PIPREQS
-
 echo ""
 
 # Export environment file
