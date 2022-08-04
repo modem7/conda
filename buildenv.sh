@@ -3,17 +3,18 @@
 set -e
 
 # Set variables
-echo "### Setting variables... ###"
+echo "### Setting variables..."
 CONDAENV="test"
 PYTHONENV="3.8"
 G_SLICE="always-malloc"
 CONDAREQS="/data/conda-requirements.txt"
+PIPUPGRADE="pip setuptools wheel"
 PIPREQS="/data/pip-requirements.txt"
 ENVFILE="/data/environment.yml"
 SECONDS=0
 
 # Create .condarc file
-echo "### Creating .condarc... ###"
+echo "### Creating .condarc..."
 f=/opt/conda/.condarc
 cat > $f << EOF
 channels:
@@ -26,7 +27,7 @@ EOF
 # Create trap for SIGINT
 trap 'kill -TERM $PID' TERM INT
 # Create environment
-echo "### Creating environment... ###"
+echo "### Creating environment..."
 exec mamba create --name $CONDAENV -y --file $CONDAREQS python=$PYTHONENV &
 PID=$!
 wait $PID
@@ -35,28 +36,30 @@ wait $PID
 EXIT_STATUS=$?
 
 # Initialise Shell
-echo "### Initialising shell ###"
+echo "### Initialising shell..."
 mamba init bash
 
 # Reload Shell
-echo "### Reloading shell ###"
+echo "### Reloading shell..."
 source ~/.bashrc
 
 # Activate environment and install additional packages
-echo "### Activating environment and installing pip packages ###"
+echo "### Activating environment and installing pip packages..."
 source activate $CONDAENV && \
-python3 -m pip install --root-user-action=ignore -U pip setuptools wheel && \
+python3 -m pip install --root-user-action=ignore -U $PIPUPGRADE && \
 python3 -m pip install --root-user-action=ignore -U -r $PIPREQS
 
+echo ""
+
 # Export environment file
-echo "### Exporting Conda env file ###"
+echo "### Exporting Conda env file..."
 mamba env export --no-builds > $ENVFILE
 
 # Install additional packages that conflict otherwise
 #mamba install -y libgfortran5==9.3.0
 
 echo ""
-echo "### Created environment file in $ENVFILE ###"
+echo "### Created environment file in $ENVFILE"
 echo ""
 date -ud "@$SECONDS" "+Time taken to run script: %H:%M:%S"
 
