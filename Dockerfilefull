@@ -1,21 +1,30 @@
 # syntax = docker/dockerfile:latest
 # Image Size 2.7gb
 
-FROM condaforge/mambaforge-pypy3:4.9.2-7
+FROM condaforge/mambaforge-pypy3:4.13.0-1
 
-# System Envs
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+# System Env
+ENV PYTHONDONTWRITEBYTECODE='true'
+ENV PIP_ROOT_USER_ACTION=ignore
 
-# Conda Env names
+# User Env
 ENV CONDAENV='test'
+ENV PYTHONENV='3.8'
+ENV CONDAREQS='conda-requirements.txt'
+ENV PIPUPGRADE='pip setuptools wheel'
+ENV PIPREQS='pip-requirements.txt'
+ENV ENVFILE='environment.yml'
 ENV PYTHONSCRIPT='run.py'
+ENV CHANNELCMD='--channel defaults --channel anaconda --channel conda-forge --channel intel --channel fastchan'
 
-COPY pip-requirements.txt conda-requirements.txt environment.yml /
+COPY $PIPREQS $CONDAREQS $ENVFILE /
 
 # Create Env + install additional packages
-RUN mamba create --name $CONDAENV -y --file /conda-requirements.txt --channel default --channel anaconda --channel conda-forge && \
-    conda init bash && bash ~/.bashrc && . ~/.bashrc && \
-	conda activate $CONDAENV && python3 -m pip install --no-cache-dir -U pip setuptools wheel && python3 -m pip install -U -r /pip-requirements.txt && mamba install -y -c conda-forge -c anaconda -c default libgfortran5==9.3.0
+RUN mamba create --name $CONDAENV -y --file /$CONDAREQS $CHANNELCMD python=$PYTHONENV && \
+    mamba init bash && \
+    . ~/.bashrc && \
+    mamba activate $CONDAENV && \
+    python3 -m pip install -U -r /$PIPREQS
 
 # Make RUN commands use the new environment:
 #SHELL ["conda", "run", "-n", "$CONDAENV", "/bin/bash", "-c"]

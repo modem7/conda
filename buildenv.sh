@@ -2,27 +2,30 @@
 
 set -e
 
-# Set variables
-echo "### Setting variables..."
+# Set system variables
+echo "### Setting system variables..."
+PYTHONDONTWRITEBYTECODE="true"
+SECONDS=0
+
+# Set user variables
+echo "### Setting user variables..."
 CONDAENV="test"
 PYTHONENV="3.8"
-G_SLICE="always-malloc"
 CONDAREQS="/data/conda-requirements.txt"
 PIPUPGRADE="pip setuptools wheel"
 PIPREQS="/data/pip-requirements.txt"
 ENVFILE="/data/environment.yml"
-SECONDS=0
 
 # Create .condarc file
 echo "### Creating .condarc..."
 f=/opt/conda/.condarc
 cat > $f << EOF
 channels:
-  - defaults
   - conda-forge
   - anaconda
   - intel
   - fastchan
+  - defaults
 pip_interop_enabled: True
 EOF
 

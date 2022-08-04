@@ -2,21 +2,30 @@
 # Original image Size 2.6gb
 # New image size 577.7mb
 
-FROM condaforge/mambaforge-pypy3:4.9.2-7 AS build
+FROM condaforge/mambaforge-pypy3:4.13.0-1 AS build
 
-# Conda Env names
+# System Env
+ENV PYTHONDONTWRITEBYTECODE='true'
+ENV PIP_ROOT_USER_ACTION=ignore
+
+# User Env
 ENV CONDAENV='test'
+ENV PYTHONENV='3.8'
+ENV CONDAREQS='conda-requirements.txt'
+ENV PIPUPGRADE='pip setuptools wheel'
+ENV PIPREQS='pip-requirements.txt'
+ENV ENVFILE='environment.yml'
 
 # Install the package as normal:
-COPY environment.yml /
-RUN mamba env create -f environment.yml
+COPY $ENVFILE /
+RUN mamba env create -f /$ENVFILE
 
 # Install conda-pack:
 RUN mamba install -y -c conda-forge conda-pack
 
 # Use conda-pack to create a standalone enviornment
 # in /venv:
-RUN conda-pack -n test -o /tmp/env.tar && \
+RUN conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar && \
     mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
     rm /tmp/env.tar
 

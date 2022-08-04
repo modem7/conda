@@ -116,7 +116,7 @@ packaging               21.0                     python
 pandas                  1.1.5                    python  
 passwd                  1:4.5-1.1                deb     
 perl-base               5.28.1-6+deb10u1         deb     
-pip                     22.2.1                   python  
+pip                     22.2.2                   python  
 pluggy                  0.13.1                   python  
 protobuf                3.17.2                   python  
 py                      1.10.0                   python  
