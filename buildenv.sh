@@ -3,13 +3,17 @@
 set -e
 
 # Set variables
-echo "Settings variables..."
-CONDAENV=test
-PYTHONENV=3.8
-G_SLICE=always-malloc
+echo "### Setting variables... ###"
+CONDAENV="test"
+PYTHONENV="3.8"
+G_SLICE="always-malloc"
+CONDAREQS="/data/conda-requirements.txt"
+PIPREQS="/data/pip-requirements.txt"
+ENVFILE="/data/environment.yml"
+SECONDS=0
 
 # Create .condarc file
-echo "Creating .condarc..."
+echo "### Creating .condarc... ###"
 f=/opt/conda/.condarc
 cat > $f << EOF
 channels:
@@ -22,8 +26,8 @@ EOF
 # Create trap for SIGINT
 trap 'kill -TERM $PID' TERM INT
 # Create environment
-echo "Creating environment..."
-exec mamba create -v --name $CONDAENV -y --file /data/conda-requirements.txt python=$PYTHONENV &
+echo "### Creating environment... ###"
+exec mamba create --name $CONDAENV -y --file $CONDAREQS python=$PYTHONENV &
 PID=$!
 wait $PID
 trap - TERM INT
@@ -31,21 +35,29 @@ wait $PID
 EXIT_STATUS=$?
 
 # Initialise Shell
+echo "### Initialising shell ###"
 mamba init bash
 
 # Reload Shell
+echo "### Reloading shell ###"
 source ~/.bashrc
 
 # Activate environment and install additional packages
+echo "### Activating environment and installing pip packages ###"
 source activate $CONDAENV && \
-python3 -m pip install --no-cache-dir -U pip setuptools wheel && \
-python3 -m pip install --no-cache-dir -U -r /data/pip-requirements.txt
+python3 -m pip install --root-user-action=ignore -U pip setuptools wheel && \
+python3 -m pip install --root-user-action=ignore -U -r $PIPREQS
 
 # Export environment file
-mamba env export --no-builds > /data/environment.yml
+echo "### Exporting Conda env file ###"
+mamba env export --no-builds > $ENVFILE
 
 # Install additional packages that conflict otherwise
 #mamba install -y libgfortran5==9.3.0
 
-echo "Created environment file"
+echo ""
+echo "### Created environment file in $ENVFILE ###"
+echo ""
+date -ud "@$SECONDS" "+Time taken to run script: %H:%M:%S"
+
 exit 0

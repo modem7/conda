@@ -1,6 +1,5 @@
 https://uwekorn.com/2021/03/01/deploying-conda-environments-in-docker-how-to-do-it-right.html
 https://jcristharif.com/conda-docker-tips.html
-https://towardsdatascience.com/conda-pip-and-docker-ftw-d64fe638dc45
 https://gist.github.com/pangyuteng/f5b00fe63ac31a27be00c56996197597
 https://github.com/conda-archive/conda-docker/blob/master/condatest/linux-64-python3.6/Dockerfile
 https://github.com/LCOGT/docker-miniconda3/blob/master/Dockerfile
@@ -30,7 +29,7 @@ conda env export --from-history | head -n 8
 docker run -it --rm -v "$(pwd)":/data 'condaforge/mambaforge-pypy3:4.9.2-7' bin/bash
 
 CHANNEL1=default CHANNEL2=conda-forge CHANNEL3=anaconda CHANNEL4=intel
-mamba create --name test -y --file /data/conda-requirements.txt -c $CHANNEL1 -c $CHANNEL2 -c $CHANNEL3 && \
+mamba create --name test -y --file /data/conda-requirements.txt -c $CHANNEL1 -c $CHANNEL2 -c $CHANNEL3 -c $CHANNEL4 && \
 conda init bash && source ~/.bashrc && \
 source activate test && \
 conda config --append channels $CHANNEL2 && conda config --append channels $CHANNEL3 && \
