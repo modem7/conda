@@ -29,7 +29,6 @@ channels:
 pip_interop_enabled: True
 EOF
 
-# Create trap for SIGINT
 # Create environment
 echo "### Creating environment..."
 exec mamba create -v --name $CONDAENV -y --file $CONDAREQS python=$PYTHONENV
