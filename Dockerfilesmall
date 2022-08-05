@@ -5,7 +5,6 @@
 FROM condaforge/mambaforge-pypy3:4.13.0-1 AS build
 
 # System Env
-ENV PYTHONDONTWRITEBYTECODE='1'
 ENV PIP_ROOT_USER_ACTION='ignore'
 
 # User Env
@@ -18,16 +17,20 @@ ENV ENVFILE='environment.yml'
 
 # Install the package as normal:
 COPY $ENVFILE /
-RUN mamba env create -f /$ENVFILE
+RUN mamba env create -v -f /$ENVFILE
 
 # Install conda-pack:
 RUN mamba install -y -c conda-forge conda-pack
 
 # Use conda-pack to create a standalone enviornment
 # in /venv:
-RUN conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar && \
-    mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
+RUN <<EOF
+    set -x
+    conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar
+    mkdir /venv && cd /venv
+    tar xf /tmp/env.tar
     rm /tmp/env.tar
+EOF
 
 # We've put venv in same path it'll be in final image,
 # so now fix up paths:
@@ -36,7 +39,7 @@ RUN /venv/bin/conda-unpack
 # The runtime-stage image; we can use Debian as the
 # base image since the Conda env also includes Python
 # for us.
-FROM debian:buster AS runtime
+FROM debian:buster-slim AS runtime
 
 # Copy entrypoint script
 COPY --chmod=755 entrypoint.sh /

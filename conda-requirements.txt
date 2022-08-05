@@ -1,7 +1,4 @@
 nomkl
-pip
-wheel
-setuptools
 _libgcc_mutex==0.1
 _openmp_mutex==4.5
 aiohttp==3.7.4
@@ -73,3 +70,6 @@ yaml==0.2.5
 yarl==1.6.3
 zeromq==4.3.4
 zlib==1.2.11
+pip
+wheel
+setuptools

@@ -4,8 +4,7 @@ set -e
 
 # Set system variables
 echo "### Setting system variables..."
-PYTHONDONTWRITEBYTECODE="true"
-SECONDS=0
+SECONDS="0"
 
 # Set user variables
 echo "### Setting user variables..."
@@ -23,15 +22,22 @@ cat > $CONDARC << EOF
 channels:
   - conda-forge
   - anaconda
-  - fastchan
   - intel
   - defaults
 pip_interop_enabled: True
+#channel_priority: strict
 EOF
 
+# Create trap for SIGINT
+trap 'kill -TERM $PID' TERM INT
 # Create environment
 echo "### Creating environment..."
-exec mamba create -v --name $CONDAENV -y --file $CONDAREQS python=$PYTHONENV
+mamba create -v --name $CONDAENV -y --file $CONDAREQS python=$PYTHONENV &
+PID=$!
+wait $PID
+trap - TERM INT
+wait $PID
+EXIT_STATUS=$?
 
 # Initialise Shell
 echo "### Initialising shell..."
@@ -43,8 +49,7 @@ source ~/.bashrc
 
 # Activate environment and install additional packages
 echo "### Activating environment and installing pip packages..."
-source activate $CONDAENV && \
-#python3 -m pip install --root-user-action=ignore -U $PIPUPGRADE
+source activate $CONDAENV
 python3 -m pip install --root-user-action=ignore -U -r $PIPREQS
 echo ""
 

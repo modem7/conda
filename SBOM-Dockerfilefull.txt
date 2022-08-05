@@ -19,7 +19,7 @@ cassandra-driver        3.25.0                             python
 certifi                 2021.10.8                          python  
 certifi                 2021.5.30                          python  
 cffi                    1.14.6                             python  
-chardet                 3.0.4                              python  
+chardet                 4.0.0                              python  
 charset-normalizer      2.0.4                              python  
 charset-normalizer      2.1.0                              python  
 colorama                0.4.4                              python  
@@ -44,7 +44,6 @@ findutils               4.7.0-1ubuntu1                     deb
 gcc-10-base             10.3.0-1ubuntu1~20.04              deb     
 git                     1:2.25.1-1ubuntu3.5                deb     
 git-man                 1:2.25.1-1ubuntu3.5                deb     
-gnureadline             8.1.2                              python  
 gpgv                    2.2.19-3ubuntu2.2                  deb     
 greenlet                0.4.13                             python  
 greenlet                1.1.1                              python  
@@ -52,12 +51,10 @@ grep                    3.4-1                              deb
 gzip                    1.10-0ubuntu4.1                    deb     
 hostname                3.23                               deb     
 hpy                     0.0.3                              python  
-icc-rt                  2019.0                             python  
 idna                    2.10                               python  
 idna                    3.3                                python  
 iniconfig               1.1.1                              python  
 init-system-helpers     1.57                               deb     
-intel-openmp            2022.1.0                           python  
 joblib                  1.1.0                              python  
 libacl1                 2.2.53-6                           deb     
 libapt-pkg6.0           2.0.9                              deb     
@@ -163,8 +160,8 @@ passwd                  1:4.8.1-1ubuntu5.20.04.2           deb
 perl                    5.30.0-9ubuntu0.2                  deb     
 perl-base               5.30.0-9ubuntu0.2                  deb     
 perl-modules-5.30       5.30.0-9ubuntu0.2                  deb     
-pip                     22.1.2                             python  
 pip                     22.2.1                             python  
+pip                     22.2.2                             python  
 pluggy                  0.13.1                             python  
 procps                  2:3.3.16-1ubuntu2.3                deb     
 protobuf                3.17.2                             python  
@@ -174,7 +171,7 @@ pyOpenSSL               22.0.0                             python
 pycosat                 0.6.3                              python  
 pycparser               2.20                               python  
 pymssql                 2.1.5                              python  
-pyparsing               3.0.4                              python  
+pyparsing               3.0.9                              python  
 pytest                  6.2.4                              python  
 python-dateutil         2.8.2                              python  
 pytz                    2021.3                             python  
@@ -186,6 +183,7 @@ ruamel-yaml-conda       0.15.100                           python
 ruamel-yaml-conda       0.15.80                            python  
 sed                     4.7-1                              deb     
 sensible-utils          0.0.12+nmu1                        deb     
+setuptools              59.8.0                             python  
 setuptools              61.2.0                             python  
 six                     1.16.0                             python  
 sysvinit-utils          2.96-2.1ubuntu1                    deb     
@@ -196,7 +194,6 @@ tqdm                    4.64.0                             python
 typing-extensions       3.10.0.2                           python  
 ubuntu-keyring          2020.02.11.4                       deb     
 urllib3                 1.26.11                            python  
-urllib3                 1.26.6                             python  
 util-linux              2.34-0.1ubuntu9.3                  deb     
 wget                    1.20.3-1ubuntu2                    deb     
 wheel                   0.37.1                             python  

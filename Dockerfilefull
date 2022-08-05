@@ -4,8 +4,6 @@
 FROM condaforge/mambaforge-pypy3:4.13.0-1
 
 # System Env
-ENV PYTHONDONTWRITEBYTECODE='1'
-ENV PYTHONUNBUFFERED='1'
 ENV PIP_ROOT_USER_ACTION=ignore
 
 # User Env
@@ -23,14 +21,14 @@ COPY $PIPREQS $CONDAREQS $ENVFILE /
 COPY $CONDARC /opt/conda/
 
 # Create Env + install additional packages
-RUN <<-EOF
-         set -x
-         mamba create --name $CONDAENV -y --file /$CONDAREQS python=$PYTHONENV
-         mamba init bash
-         . ~/.bashrc
-         mamba activate $CONDAENV
-         python3 -m pip install -U -r /$PIPREQS
-       EOF
+RUN <<EOF
+    set -x
+    mamba create --name $CONDAENV -y --file /$CONDAREQS python=$PYTHONENV
+    mamba init bash
+    . ~/.bashrc
+    mamba activate $CONDAENV
+    python3 -m pip install -U -r /$PIPREQS
+EOF
 
 # Make RUN commands use the new environment:
 #SHELL ["conda", "run", "-n", "$CONDAENV", "/bin/bash", "-c"]

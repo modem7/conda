@@ -35,17 +35,14 @@ e2fsprogs               1.44.5-1+deb10u3         deb
 fdisk                   2.33.1-0.1               deb     
 findutils               4.6.0+git+20190209-2     deb     
 gcc-8-base              8.3.0-6                  deb     
-gnureadline             8.1.2                    python  
 gpgv                    2.2.12-1+deb10u2         deb     
 greenlet                1.1.1                    python  
 grep                    3.3-1                    deb     
 gzip                    1.9-3+deb10u1            deb     
 hostname                3.21                     deb     
-icc-rt                  2019.0                   python  
 idna                    2.10                     python  
 iniconfig               1.1.1                    python  
 init-system-helpers     1.56+nmu1                deb     
-intel-openmp            2022.1.0                 python  
 iproute2                4.20.0-2+deb10u1         deb     
 iputils-ping            3:20180629-2+deb10u2     deb     
 joblib                  1.1.0                    python  
@@ -132,7 +129,7 @@ pyzmq                   22.2.1                   python
 requests                2.25.1                   python  
 ruamel-yaml-conda       0.15.100                 python  
 sed                     4.7-1                    deb     
-setuptools              63.3.0                   python  
+setuptools              59.8.0                   python  
 six                     1.16.0                   python  
 sysvinit-utils          2.93-8                   deb     
 tar                     1.30+dfsg-6              deb     
@@ -140,7 +137,7 @@ toml                    0.10.2                   python
 tqdm                    4.61.2                   python  
 typing-extensions       3.10.0.2                 python  
 tzdata                  2021a-0+deb10u5          deb     
-urllib3                 1.26.6                   python  
+urllib3                 1.26.11                  python  
 util-linux              2.33.1-0.1               deb     
 wheel                   0.37.1                   python  
 yarl                    1.6.3                    python  
