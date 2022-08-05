@@ -30,9 +30,15 @@ pip_interop_enabled: True
 EOF
 
 # Create trap for SIGINT
+trap 'kill -TERM $PID' TERM INT
 # Create environment
 echo "### Creating environment..."
-exec mamba create -v --name $CONDAENV -y --file $CONDAREQS python=$PYTHONENV
+exec mamba create -v --name $CONDAENV -y --file $CONDAREQS python=$PYTHONENV &
+PID=$!
+wait $PID
+trap - TERM INT
+wait $PID
+EXIT_STATUS=$?
 
 # Initialise Shell
 echo "### Initialising shell..."

@@ -4,33 +4,27 @@
 FROM condaforge/mambaforge-pypy3:4.13.0-1
 
 # System Env
-ENV PYTHONDONTWRITEBYTECODE='1'
-ENV PYTHONUNBUFFERED='1'
+ENV PYTHONDONTWRITEBYTECODE='true'
 ENV PIP_ROOT_USER_ACTION=ignore
 
 # User Env
 ENV CONDAENV='test'
-ENV CONDAREQS='conda-requirements.txt'
-ENV CONDARC='.condarc'
-ENV ENVFILE='environment.yml'
 ENV PYTHONENV='3.8'
-ENV PYTHONSCRIPT='run.py'
+ENV CONDAREQS='conda-requirements.txt'
 ENV PIPUPGRADE='pip setuptools wheel'
 ENV PIPREQS='pip-requirements.txt'
-ENV CHANNELCMD='--channel conda-forge --channel anaconda --channel intel --channel fastchan --channel defaults'
+ENV ENVFILE='environment.yml'
+ENV PYTHONSCRIPT='run.py'
+ENV CHANNELCMD='--channel defaults --channel anaconda --channel conda-forge --channel intel --channel fastchan'
 
 COPY $PIPREQS $CONDAREQS $ENVFILE /
-COPY $CONDARC /opt/conda/
 
 # Create Env + install additional packages
-RUN <<-EOF
-         set -x
-         mamba create --name $CONDAENV -y --file /$CONDAREQS python=$PYTHONENV
-         mamba init bash
-         . ~/.bashrc
-         mamba activate $CONDAENV
-         python3 -m pip install -U -r /$PIPREQS
-       EOF
+RUN mamba create --name $CONDAENV -y --file /$CONDAREQS $CHANNELCMD python=$PYTHONENV && \
+    mamba init bash && \
+    . ~/.bashrc && \
+    mamba activate $CONDAENV && \
+    python3 -m pip install -U -r /$PIPREQS
 
 # Make RUN commands use the new environment:
 #SHELL ["conda", "run", "-n", "$CONDAENV", "/bin/bash", "-c"]

@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+  - anaconda
+  - intel
+  - fastchan
+  - defaults
+pip_interop_enabled: True

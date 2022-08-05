@@ -1,0 +1,4 @@
+crate==0.26.0
+icc_rt==2019.0
+gnureadline==8.1.2
+dask==1.2.2

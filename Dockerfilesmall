@@ -5,8 +5,8 @@
 FROM condaforge/mambaforge-pypy3:4.13.0-1 AS build
 
 # System Env
-ENV PYTHONDONTWRITEBYTECODE='true'
-ENV PIP_ROOT_USER_ACTION=ignore
+ENV PYTHONDONTWRITEBYTECODE='1'
+ENV PIP_ROOT_USER_ACTION='ignore'
 
 # User Env
 ENV CONDAENV='test'
