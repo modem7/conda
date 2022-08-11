@@ -1,5 +1,7 @@
 docker run -it --name grayskull --rm -v "$(pwd)":/data 'condaforge/mambaforge-pypy3' bin/bash
 
+#####
+
 CONDAENV="tensorflow"
 PYTHONENV="3.8.10"
 CONDAREQS="/data/conda-requirements.txt"
@@ -14,9 +16,25 @@ channels:
 pip_interop_enabled: True
 EOF
 
-mamba create -v --name $CONDAENV -y python=$PYTHONENV && mamba init bash && source ~/.bashrc && source activate $CONDAENV
+mamba create --name $CONDAENV -y python=$PYTHONENV && mamba init bash && source ~/.bashrc && source activate $CONDAENV
 
 #####
 
 mamba install -y
 mamba repoquery whoneeds
+mamba install -y --file /data/conda-requirements.txt
+
+#####
+
+testing pip-tools for dependency reduction
+
+~~~
+
+regex for removing versions to feed into pip-compile (notepad++)
+(==\S)(.*)
+
+
+python3 -m pip install -U setuptools pip wheel
+python3 -m pip install -U pip-compile-multi
+
+pip-compile-multi --autoresolve -d /data/
