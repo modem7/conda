@@ -1,0 +1,54 @@
+# syntax = docker/dockerfile:latest
+# Original image Size 2.6gb
+# New image size 577.7mb
+
+FROM condaforge/mambaforge-pypy3:4.13.0-1 AS build
+
+# System Env
+ENV PIP_ROOT_USER_ACTION='ignore'
+
+# User Env
+ENV CONDAENV='tensorflow'
+ENV PYTHONENV='3.8'
+ENV CONDAREQS='conda-requirements.txt'
+# ENV PIPUPGRADE='pip setuptools wheel'
+# ENV PIPREQS='pip-requirements.txt'
+ENV ENVFILE='environment.yml'
+
+# Install the package as normal:
+COPY $ENVFILE /
+RUN mamba env create -v -f /$ENVFILE
+
+# Install conda-pack:
+RUN mamba install -y -c conda-forge conda-pack
+
+# Use conda-pack to create a standalone enviornment
+# in /venv:
+RUN <<EOF
+    set -x
+    conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar
+    mkdir /venv && cd /venv
+    tar xf /tmp/env.tar
+    rm /tmp/env.tar
+EOF
+
+# We've put venv in same path it'll be in final image,
+# so now fix up paths:
+RUN /venv/bin/conda-unpack
+
+# The runtime-stage image; we can use Debian as the
+# base image since the Conda env also includes Python
+# for us.
+FROM debian:buster-slim AS runtime
+
+# Copy entrypoint script
+COPY --chmod=755 entrypoint.sh /
+
+# Copy /venv from the previous stage:
+COPY --from=build /venv /venv
+
+# When image is run, run the code with the environment activated:
+SHELL ["/bin/bash", "-c"]
+
+ENTRYPOINT ["/venv/bin/tini", "-g", "--"]
+CMD ["/entrypoint.sh"]

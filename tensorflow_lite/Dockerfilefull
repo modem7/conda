@@ -15,7 +15,7 @@ ENV PIPUPGRADE='pip setuptools wheel'
 ENV PIPREQS='pip-requirements.txt'
 ENV ENVFILE='environment.yml'
 ENV PYTHONSCRIPT='run.py'
-ENV CHANNELCMD='--channel defaults --channel anaconda --channel conda-forge --channel intel --channel fastchan'
+ENV CHANNELCMD='--channel defaults --channel anaconda --channel intel'
 
 COPY $PIPREQS $CONDAREQS $ENVFILE /
 

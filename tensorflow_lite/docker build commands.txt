@@ -1,0 +1,10 @@
+Make sure the environment file is up to date:
+./initiate-buildenv.sh
+
+Build Docker images
+DOCKER_BUILDKIT=1 docker build --no-cache -t condafull:test -f Dockerfilefull .
+DOCKER_BUILDKIT=1 docker build --no-cache -t condasmall:test -f Dockerfilesmall .
+
+Output latest SBOM:
+docker sbom --layers all condafull:test -o SBOM-Dockerfilefull.txt
+docker sbom --layers all condasmall:test -o SBOM-Dockerfilesmall.txt
