@@ -1,0 +1,95 @@
+absl-py==0.13.0 #installed when installing tensorflow
+aiohttp==3.7.4 #installed when installing tensorflow
+astor==0.8.1 #installed when installing tensorflow
+astunparse==1.6.3 #installed when installing tensorflow
+async-timeout==3.0.1 #installed when installing tensorflow
+attrs==21.2.0 #installed when installing tensorflow
+blas==1.0#installed when installing tensorflow
+blinker==1.4#installed when installing tensorflow
+brotlipy==0.7.0#installed when installing tensorflow
+ca-certificates==2021.7.5 #installed when creating an environment
+cachetools==4.2.2 #installed when installing tensorflow
+certifi==2021.5.30 #installed when creating an environment
+cffi==1.14.6 #installed when installing tensorflow
+chardet==4.0.0 #package aiohttp-3.7.4-py36h27cfd23_1 requires chardet >=2.0,<4.0, but none of the providers can be installed
+charset-normalizer==2.0.4 #installed when installing tensorflow
+click==8.0.1 #installed when installing tensorflow
+cryptography==3.4.7 #installed when installing tensorflow
+google-auth==1.33.0 #installed when installing tensorflow
+google-auth-oauthlib==0.4.4 #installed when installing tensorflow
+google-pasta==0.2.0 #installed when installing tensorflow
+grpcio==1.36.1  #installed when installing tensorflow
+h5py==2.10.0  #installed when installing tensorflow
+hdf5==1.10.4  #installed when installing tensorflow
+idna==2.10  #installed when installing tensorflow
+importlib-metadata==4.8.1  #installed when installing tensorflow
+intel-openmp==2021.3.0 #installed when installing tensorflow
+keras==2.4.3 #installed when installing tensorflow
+keras-applications==1.0.8 #installed when installing tensorflow
+keras-base==2.4.3 #installed when installing tensorflow
+keras-preprocessing==1.1.2 #installed when installing tensorflow
+ld_impl_linux-64==2.35.1 #installed when creating an environment
+libffi==3.3 #installed when creating an environment
+libgcc-ng==9.3.0 #installed when creating an environment
+libgfortran4==7.5.0 #conflict with 5? #installed when installing scikit-learn
+libgfortran5==9.3.0 #conflict with 4? #installed when installing tensorflow
+libgomp==9.3.0 #installed when creating an environment
+libopenblas==0.3.13 #installed when installing tensorflow
+libprotobuf==3.17.2 #installed when installing tensorflow
+libstdcxx-ng==9.3.0 #installed when creating an environment
+markdown==3.3.4 #installed when installing tensorflow
+mkl==2020.2 #installed when installing tensorflow
+mkl_fft==1.3.0 #installed when installing tensorflow
+multidict==5.1.0 #installed when installing tensorflow
+ncurses==6.2 #installed when creating an environment
+numpy==1.19.1 #installed when installing tensorflow
+numpy-base==1.19.1 #installed when installing tensorflow
+oauthlib==3.1.1 #installed when installing tensorflow
+opt_einsum==3.3.0 #installed when installing tensorflow
+pip>=21.0.1 #installed when creating an environment
+protobuf==3.17.2 #installed when installing tensorflow
+pyasn1==0.4.8 #installed when installing tensorflow
+pyasn1-modules==0.2.8 #installed when installing tensorflow
+pycparser==2.20 #installed when installing tensorflow
+pyjwt==2.1.0 #installed when installing tensorflow
+pyopenssl==20.0.1 #installed when installing tensorflow
+pysocks==1.7.1 #installed when installing tensorflow
+python==3.8.10 #installed when creating an environment
+readline==8.1 #installed when creating an environment
+requests==2.25.1 #installed when installing tensorflow
+requests-oauthlib==1.3.0 #installed when installing tensorflow
+rsa==4.7.2 #installed when installing tensorflow
+scipy==1.6.2 #installed when installing tensorflow
+setuptools==52.0.0 #installed when creating an environment
+six==1.16.0 #installed when installing tensorflow
+sqlite==3.36.0 #installed when creating an environment
+tensorboard==2.4.0 #installed when installing tensorflow
+tensorboard-plugin-wit==1.6.0 #installed when installing tensorflow
+tensorflow-base==2.3.0 #installed when installing tensorflow
+termcolor==1.1.0 #installed when installing tensorflow
+tk==8.6.10 #installed when creating an environment
+typing_extensions==3.10.0.2 #installed when installing tensorflow
+urllib3==1.26.6 #installed when installing tensorflow
+werkzeug==1.0.1 #installed when installing tensorflow
+wheel>=0.36.2 #installed when creating an environment
+wrapt==1.12.1 #installed when installing tensorflow
+xz==5.2.5 #installed when creating an environment
+yarl==1.6.3 #installed when installing tensorflow
+zipp==3.6.0 #installed when installing tensorflow
+zlib==1.2.11 #installed when creating an environment
+_libgcc_mutex==0.1 #installed when creating an environment
+_openmp_mutex==4.5 #installed when creating an environment
+_tflow_select==2.3.0 #installed when installing tensorflow
+itsdangerous==2.0.1 #installed when installing flask
+jinja2==3.0.1 #installed when installing flask
+markupsafe==2.0.1 #installed when installing flask
+pyrsistent==0.17.3 #installed when installing flask-restx
+python-dateutil==2.8.2 #installed when installing flask-restx
+pytz==2021.3 #installed when installing flask-restx
+jsonschema==3.2.0 #installed when installing flask-restx
+aniso8601==9.0.1 #installed when installing flask-restx
+threadpoolctl==2.2.0 #installed when installing scikit-learn
+mkl-service==2.3.0 #installed when installing scikit-learn
+mkl_random==1.1.1 #installed when installing scikit-learn
+libgfortran-ng==9.3.0 #installed when installing scikit-learn
+joblib==1.1.0 #installed when installing scikit-learn

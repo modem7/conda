@@ -1,0 +1,22 @@
+docker run -it --name grayskull --rm -v "$(pwd)":/data 'condaforge/mambaforge-pypy3' bin/bash
+
+CONDAENV="tensorflow"
+PYTHONENV="3.8.10"
+CONDAREQS="/data/conda-requirements.txt"
+ENVFILE="/data/environment.yml"
+CONDARC="/opt/conda/.condarc"
+
+cat > $CONDARC << EOF
+channels:
+  - anaconda
+  - intel
+  - defaults
+pip_interop_enabled: True
+EOF
+
+mamba create -v --name $CONDAENV -y python=$PYTHONENV && mamba init bash && source ~/.bashrc && source activate $CONDAENV
+
+#####
+
+mamba install -y
+mamba repoquery whoneeds
