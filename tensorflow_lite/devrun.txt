@@ -3,7 +3,7 @@ docker run -it --name grayskull --rm -v "$(pwd)":/data 'condaforge/mambaforge-py
 #####
 
 CONDAENV="tensorflow"
-PYTHONENV="3.8.10"
+PYTHONENV="3.8"
 CONDAREQS="/data/conda-requirements.txt"
 ENVFILE="/data/environment.yml"
 CONDARC="/opt/conda/.condarc"

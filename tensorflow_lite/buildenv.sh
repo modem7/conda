@@ -10,10 +10,10 @@ PIP_ROOT_USER_ACTION='ignore'
 # Set user variables
 echo "### Setting user variables..."
 CONDAENV="tensorflow"
-PYTHONENV="3.10"
+PYTHONENV="3.8"
 CONDAREQS="/data/conda-requirements.txt"
-PIPUPGRADE="pip setuptools wheel"
-PIPREQS="/data/pip-requirements.txt"
+#PIPUPGRADE="pip setuptools wheel"
+#PIPREQS="/data/pip-requirements.txt"
 ENVFILE="/data/environment.yml"
 CONDARC="/opt/conda/.condarc"
 
@@ -24,7 +24,7 @@ channels:
   - anaconda
   - intel
   - defaults
-pip_interop_enabled: True
+#pip_interop_enabled: True
 EOF
 
 # Create trap for SIGINT
@@ -38,23 +38,22 @@ trap - TERM INT
 wait $PID
 EXIT_STATUS=$?
 
-# Initialise Shell
-echo "### Initialising shell..."
-mamba init bash
+# # Initialise Shell
+# echo "### Initialising shell..."
+# mamba init bash
 
-# Reload Shell
-echo "### Reloading shell..."
-source ~/.bashrc
+# # Reload Shell
+# echo "### Reloading shell..."
+# source ~/.bashrc
 
-# Activate environment and install additional packages
-echo "### Activating environment and installing pip packages..."
-source activate $CONDAENV
-python3 -m pip install --root-user-action=ignore -U -r $PIPREQS
-echo ""
+# # Activate environment and install additional packages
+# echo "### Activating environment..."
+# source activate $CONDAENV
+# echo ""
 
 # Export environment file
 echo "### Exporting Conda env file..."
-mamba env export --no-builds > $ENVFILE
+mamba env export --no-builds -n $CONDAENV > $ENVFILE
 
 # Install additional packages that conflict otherwise
 #mamba install -y libgfortran5==9.3.0
