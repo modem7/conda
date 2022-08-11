@@ -5,11 +5,12 @@ set -e
 # Set system variables
 echo "### Setting system variables..."
 SECONDS="0"
+PIP_ROOT_USER_ACTION='ignore'
 
 # Set user variables
 echo "### Setting user variables..."
 CONDAENV="test"
-PYTHONENV="3.8"
+PYTHONENV="3.10"
 CONDAREQS="/data/conda-requirements.txt"
 PIPUPGRADE="pip setuptools wheel"
 PIPREQS="/data/pip-requirements.txt"
