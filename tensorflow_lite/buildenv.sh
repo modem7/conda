@@ -10,7 +10,7 @@ PIP_ROOT_USER_ACTION='ignore'
 # Set user variables
 echo "### Setting user variables..."
 CONDAENV="tensorflow"
-PYTHONENV="3.8"
+PYTHONENV="3.7"
 CONDAREQS="/data/conda-requirements.txt"
 #PIPUPGRADE="pip setuptools wheel"
 #PIPREQS="/data/pip-requirements.txt"

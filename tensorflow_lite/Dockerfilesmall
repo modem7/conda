@@ -1,6 +1,4 @@
 # syntax = docker/dockerfile:latest
-# Original image Size 2.6gb
-# New image size 577.7mb
 
 FROM condaforge/mambaforge-pypy3:4.13.0-1 AS build
 
@@ -9,7 +7,7 @@ ENV PIP_ROOT_USER_ACTION='ignore'
 
 # User Env
 ENV CONDAENV='tensorflow'
-ENV PYTHONENV='3.8'
+ENV PYTHONENV='3.7'
 ENV CONDAREQS='conda-requirements.txt'
 # ENV PIPUPGRADE='pip setuptools wheel'
 # ENV PIPREQS='pip-requirements.txt'
