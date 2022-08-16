@@ -1,0 +1,1 @@
+https://pythonspeed.com/articles/activate-conda-dockerfile/#:~:text=described%20as%20a-,%E2%80%9Cexperimental%E2%80%9D,-command%2C%20so%20it

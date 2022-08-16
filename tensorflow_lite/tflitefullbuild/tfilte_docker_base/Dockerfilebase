@@ -1,0 +1,52 @@
+# syntax = docker/dockerfile:latest
+
+FROM tensorflow/tensorflow:latest-devel as tflite-builder
+
+ENV PIP_ROOT_USER_ACTION=ignore
+ENV PYTHON_VER='python3.7'
+ENV TENSORFLOWDIR='tensorflow_src/tensorflow/lite/tools/pip_package'
+# Add a number below to limit the amount of cpu cores the build will use. If this value is blank, all cores will be used.
+ENV NUM_JOBS=
+
+RUN <<EOF
+    set -x
+    apt-get update
+    apt-get install --no-install-recommends -y cmake
+    python3 -m pip install -U pip
+    python3 -m pip install -U pybind11 numpy Pillow
+EOF
+
+RUN BUILD_NUM_JOBS=$NUM_JOBS PYTHON=$PYTHON_VER $TENSORFLOWDIR/build_pip_package_with_cmake.sh native
+
+FROM python:3.7-slim-buster
+
+COPY --from=tflite-builder /tensorflow_src/tensorflow/lite/tools/pip_package/gen/tflite_pip/python/dist/tflite_runtime*.whl /
+
+# Add additional required dependencies
+# RUN <<EOF
+    # set -x
+    # apt-get update
+    # apt-get install --no-install-recommends -y \
+        # libjpeg-turbo-progs \
+        # libopenjp2-7 \
+        # libtiff5 \
+        # libwebp6 \
+        # libwebpdemux2 \
+        # libwebpmux3 \
+        # libxcb-icccm4 \
+        # libxcb-image0 \
+        # libxcb-keysyms1 \
+        # libxcb-render-util0 \
+        # libxkbcommon-x11-0 \
+        # zlib1g
+    # apt autoremove -y
+    # rm -rf /var/lib/apt/lists/*
+# EOF
+
+RUN <<EOF
+    set -x
+    python3 -m pip install --no-cache-dir -U pip setuptools wheel
+    python3 -m pip install --no-cache-dir -U numpy
+    python3 -m pip install --no-cache-dir *.whl
+    rm *.whl
+EOF

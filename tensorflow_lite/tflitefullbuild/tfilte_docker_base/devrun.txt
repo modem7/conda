@@ -1,0 +1,44 @@
+docker run -it --name grayskull --rm -v "$(pwd)":/data 'condaforge/mambaforge-pypy3' bin/bash
+
+#####
+
+CONDAENV="tensorflow"
+PYTHONENV="3.7"
+CONDAREQS="/data/conda-requirements.txt"
+ENVFILE="/data/environment.yml"
+CONDARC="/opt/conda/.condarc"
+
+cat > $CONDARC << EOF
+channels:
+  - anaconda
+  - intel
+  - defaults
+pip_interop_enabled: True
+EOF
+
+mamba create --name $CONDAENV -y python=$PYTHONENV && mamba init bash && source ~/.bashrc && source activate $CONDAENV && \
+mamba install -y --file $CONDAREQS python=$PYTHONENV
+
+python3 -m pip install --no-cache-dir /data/wheel/tflite_runtime-2.11.0-cp37-cp37m-linux_x86_64.whl
+
+
+#####
+
+mamba install -y
+mamba repoquery whoneeds
+mamba install -y --file /data/conda-requirements.txt
+
+#####
+
+testing pip-tools for dependency reduction
+
+~~~
+
+regex for removing versions to feed into pip-compile (notepad++)
+(==\S)(.*)
+
+
+python3 -m pip install -U setuptools pip wheel
+python3 -m pip install -U pip-compile-multi
+
+pip-compile-multi --autoresolve -d /data/

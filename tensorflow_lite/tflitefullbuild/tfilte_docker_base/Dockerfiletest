@@ -1,0 +1,132 @@
+# syntax = docker/dockerfile-upstream:master-labs
+
+FROM condaforge/mambaforge-pypy3:4.13.0-1 as tflite-builder
+
+ENV PIP_ROOT_USER_ACTION='ignore'
+ENV PYTHONDONTWRITEBYTECODE='1'
+ENV PYTHONUNBUFFERED='1'
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TENSORFLOWDIR='tensorflow_src/tensorflow/lite/tools/pip_package'
+ENV TENSORFLOWVER='2.9.1'
+ENV CONDAENV='tensorflow'
+ENV PYTHONENV='3.7'
+ENV CONDAREQS='/data/conda-requirements.txt'
+ENV ENVFILE='/data/environment.yml'
+ENV CONDARC='/opt/conda/.condarc'
+# Add a number below to limit the amount of cpu cores the build will use. If this value is blank, all cores will be used.
+ENV NUM_JOBS=''
+
+ENV BAZEL_VERSION='5.1.1'
+ENV DISABLE_BAZEL_WRAPPER='1'
+
+ADD --link --keep-git-dir=false https://github.com/tensorflow/tensorflow.git#v$TENSORFLOWVER /tensorflow_src
+ADD --link --chmod=755 https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-linux-x86_64 /usr/local/bin/bazel
+
+RUN <<EOF
+    set -x
+    apt-get update
+    apt-get install -y build-essential
+EOF
+
+# RUN <<EOF
+    # set -x
+    # echo 'tzdata tzdata/Areas select Europe' | debconf-set-selections
+    # echo 'tzdata tzdata/Zones/Europe select London' | debconf-set-selections
+    # apt-get update
+    # apt-get install -y cmake build-essential
+# EOF
+
+RUN <<EOF
+    set -x
+    cat > $CONDARC << CON
+channels:
+  - anaconda
+  - defaults
+CON
+    mamba create --name $CONDAENV -y python=$PYTHONENV
+    mamba init bash
+    . ~/.bashrc
+    . activate $CONDAENV
+    python3 -m pip install -U pip pybind11 numpy pillow
+    $TENSORFLOWDIR/build_pip_package_with_bazel.sh native
+EOF
+
+# RUN <<EOF
+    # set -x
+    # cat > $CONDARC << CON
+# channels:
+  # - anaconda
+  # - intel
+  # - defaults
+# pip_interop_enabled: True
+# CON
+    # mamba create --name $CONDAENV -y python=$PYTHONENV
+    # mamba init bash
+    # . ~/.bashrc
+    # . activate $CONDAENV
+    # python3 -m pip install -U pip pybind11 numpy pillow
+    # BUILD_NUM_JOBS=$NUM_JOBS $TENSORFLOWDIR/build_pip_package_with_cmake.sh native
+# EOF
+
+###############
+
+FROM condaforge/mambaforge-pypy3:4.13.0-1 AS envbuild
+
+# System Env
+ENV PIP_ROOT_USER_ACTION='ignore'
+ENV PYTHONDONTWRITEBYTECODE='1'
+ENV PYTHONUNBUFFERED='1'
+
+# User Env
+ENV CONDAENV='tensorflow'
+ENV ENVFILE='environment.yml'
+
+# Install the package as normal and any packages in /wheel dir:
+COPY --link $ENVFILE /wheel/*.whl /
+COPY --link --from=tflite-builder /tensorflow_src/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime*.whl /
+
+RUN <<EOF
+    set -x
+    mamba env create -v -f /$ENVFILE 
+    mamba run -n $CONDAENV python3 -m pip install --no-cache-dir *.whl
+    mamba run -n $CONDAENV mamba clean -afy
+    # Use conda-pack to create a standalone environment in /venv
+    mamba install -y -c conda-forge conda-pack
+    conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar
+    mkdir /venv && cd /venv
+    tar xf /tmp/env.tar
+    rm /tmp/env.tar
+    # We've put venv in same path it'll be in final image, so now fix up paths
+    /venv/bin/conda-unpack
+EOF
+
+# # Use conda-pack to create a standalone environment in /venv:
+# RUN <<EOF
+    # set -x
+    # mamba install -y -c conda-forge conda-pack
+    # conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar
+    # mkdir /venv && cd /venv
+    # tar xf /tmp/env.tar
+    # rm /tmp/env.tar
+    # # We've put venv in same path it'll be in final image, so now fix up paths
+    # /venv/bin/conda-unpack
+# EOF
+
+###############
+
+# The runtime-stage image; we can use Debian as the
+# base image since the Conda env also includes Python
+# for us.
+FROM debian:bullseye-slim AS runtime
+
+# Copy entrypoint script
+COPY --link --chmod=755 entrypoint.sh /entrypoint.sh
+
+# Copy /venv from the previous stage:
+COPY --link --from=envbuild /venv /venv
+
+# When image is run, run the code with the environment activated:
+SHELL ["/bin/bash", "-c"]
+
+ENTRYPOINT ["/venv/bin/tini", "-g", "--"]
+CMD ["/entrypoint.sh"]

@@ -1,0 +1,42 @@
+docker run -it --name grayskull --rm -v "$(pwd)":/data 'condaforge/mambaforge-pypy3' bin/bash
+
+CONDAENV="tensorflow"
+TENLITE="tlitebuild"
+PYTHONENV="3.7"
+CONDAREQS="/data/conda-requirements.txt"
+ENVFILE="/data/environment.yml"
+CONDARC="/opt/conda/.condarc"
+TENSORFLOWDIR=tensorflow_src/tensorflow/lite/tools/pip_package
+PYTHON_VER='python3.7'
+
+cat > $CONDARC << EOF
+channels:
+  - anaconda
+  - intel
+  - defaults
+pip_interop_enabled: True
+EOF
+
+mamba create --name $TENLITE -y python=$PYTHONENV && mamba init bash && source ~/.bashrc && source activate $TENLITE
+
+apt-get update && \
+apt-get install -y cmake build-essential && \
+python3 -m pip install -U pip && \
+python3 -m pip install -U pybind11 numpy Pillow
+
+For TZ:
+8
+27
+
+git clone --depth 1 https://github.com/tensorflow/tensorflow.git tensorflow_src
+
+PKGLOC=$($TENSORFLOWDIR/build_pip_package_with_cmake.sh native | tee /dev/console | grep \/tflite_pip\/python3\/dist\/.*whl)
+
+echo $PKGLOC
+
+
+source activate base && mamba create --name $CONDAENV -y python=$PYTHONENV --file $CONDAREQS && mamba init bash && source ~/.bashrc && source activate $CONDAENV
+
+python3 -m pip install --no-cache-dir /tensorflow_src/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime-2.11.0-cp37-cp37m-linux_x86_64.whl
+
+mamba env export --no-builds -n $CONDAENV > $ENVFILE

@@ -1,0 +1,13 @@
+Run one of the following scripts from tfilte_docker_base:
+
+# Build all environments simultaneously
+./all_buildenv-initialise.sh
+
+# Build Connect environment
+./buildenv-initialise_connect
+
+# Build Deploy environment
+./buildenv-initialise_deploy
+
+# Build ML environment
+./buildenv-initialise_ml

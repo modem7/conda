@@ -1,0 +1,135 @@
+_libgcc_mutex==0.1 #installed when creating an environment
+_openmp_mutex==4.5 #installed when creating an environment
+_tflow_select==2.3.0 # tensorflow
+absl-py==0.13.0 # tensorflow
+aiohttp==3.7.4 # tensorflow
+aniso8601==9.0.1 # flask-restx
+astor==0.8.1 # tensorflow
+astunparse==1.6.3 # tensorflow
+async-timeout==3.0.1 # tensorflow
+attrs==21.2.0 # tensorflow
+backcall==0.2.0 # ipython
+blas==1.0# tensorflow
+blinker==1.4# tensorflow
+brotli==1.0.9 # matplotlib
+brotlipy==0.7.0# tensorflow
+ca-certificates==2021.7.5 #installed when creating an environment
+cachetools==4.2.2 # tensorflow
+certifi==2021.5.30 #installed when creating an environment
+cffi==1.14.6 # tensorflow
+chardet==4.0.0 #package aiohttp-3.7.4-py36h27cfd23_1 requires chardet >=2.0,<4.0, but none of the providers can be installed
+charset-normalizer==2.0.4 # tensorflow
+click==8.0.1 # tensorflow
+cryptography==3.4.7 # tensorflow
+cycler==0.10.0 #matplotlib
+decorator==5.1.0 #ipython
+fonttools==4.25.0 #matplotlib
+freetype==2.10.4 # matplotlib
+google-auth-oauthlib==0.4.4 # tensorflow
+google-auth==1.33.0 # tensorflow
+google-pasta==0.2.0 # tensorflow
+greenlet==1.1.1 #sqlalchemy
+grpcio==1.36.1  # tensorflow
+h5py==2.10.0  # tensorflow
+hdf5==1.10.4  # tensorflow
+icu==58.2 # matplotlib
+idna==2.10  # tensorflow
+importlib-metadata==4.8.1  # tensorflow
+intel-openmp==2021.3.0 # tensorflow
+itsdangerous==2.0.1 # flask
+jedi==0.18.0 #ipython
+jinja2==3.0.1 # flask
+joblib==1.1.0 # scikit-learn
+jpeg==9d # matplotlib
+jsonschema==3.2.0 # flask-restx
+keras-applications==1.0.8 # tensorflow
+keras-base==2.4.3 # tensorflow
+keras-preprocessing==1.1.2 # tensorflow
+keras==2.4.3 # tensorflow
+kiwisolver==1.3.1 #matplotlib
+ld_impl_linux-64==2.35.1 #installed when creating an environment
+libffi==3.3 #installed when creating an environment
+libgcc-ng==9.3.0 #installed when creating an environment
+libgfortran-ng==9.3.0 # scikit-learn
+libgfortran4==7.5.0 # scikit-learn
+libgfortran5==9.3.0 # tensorflow
+libgomp==9.3.0 #installed when creating an environment
+libopenblas==0.3.13 # tensorflow
+libpng==1.6.37 # matplotlib
+libprotobuf==3.17.2 # tensorflow
+libsodium==1.0.18 # zeromq
+libstdcxx-ng==9.3.0 #installed when creating an environment
+libtiff==4.2.0 # matplotlib
+libwebp==1.2.0 # matplotlib
+lz4-c==1.9.3 # matplotlib
+markdown==3.3.4 # tensorflow
+markupsafe==2.0.1 # flask
+matplotlib-base==3.4.3 # matplotlib
+matplotlib-inline==0.1.2 #ipython
+mkl-service==2.3.0 # scikit-learn
+mkl==2020.2 # tensorflow
+mkl_fft==1.3.0 # tensorflow
+mkl_random==1.1.1 # scikit-learn
+multidict==5.1.0 # tensorflow
+munkres==1.1.4 # matplotlib
+ncurses==6.2 #installed when creating an environment
+numpy-base==1.19.1 # tensorflow
+numpy==1.19.1 # tensorflow
+oauthlib==3.1.1 # tensorflow
+opt_einsum==3.3.0 # tensorflow
+packaging==21.0 #matplotlib
+parso==0.8.2 #jedi
+pexpect==4.8.0 #jedi
+pickleshare==0.7.5 #ipython
+pillow==8.4.0 #matplotlib
+pip>=21.0.1 #installed when creating an environment
+pluggy==0.13.1 #pytest
+prompt-toolkit==3.0.20 #ipython
+protobuf==3.17.2 # tensorflow
+ptyprocess==0.7.0 #pexpect
+py==1.10.0 #sip
+pyasn1-modules==0.2.8 # tensorflow
+pyasn1==0.4.8 # tensorflow
+pycparser==2.20 # tensorflow
+pygments==2.10.0 #ipython
+pyjwt==2.1.0 # tensorflow
+pyopenssl==20.0.1 # tensorflow
+pyparsing==2.4.7 #matplotlib
+pyqt==5.9.2 # matplotlib
+pyrsistent==0.17.3 # flask-restx
+pysocks==1.7.1 # tensorflow
+python-dateutil==2.8.2 # flask-restx
+python==3.8.10 #installed when creating an environment
+pytz==2021.3 # flask-restx
+qt==5.9.7 # matplotlib
+readline==8.1 #installed when creating an environment
+requests-oauthlib==1.3.0 # tensorflow
+requests==2.25.1 # tensorflow
+rsa==4.7.2 # tensorflow
+scipy==1.6.2 # tensorflow
+setuptools==52.0.0 #installed when creating an environment
+sip==4.19.13 # pyqt
+six==1.16.0 # tensorflow
+sqlite==3.36.0 #installed when creating an environment
+tensorboard-plugin-wit==1.6.0 # tensorflow
+tensorboard==2.4.0 # tensorflow
+tensorflow-base==2.3.0 # tensorflow
+termcolor==1.1.0 # tensorflow
+threadpoolctl==2.2.0 # scikit-learn
+tk==8.6.10 #installed when creating an environment
+toml==0.10.2 #sip
+tornado==6.1 # matplotlib
+tqdm==4.61.2 # conda-package-handling
+traitlets==5.1.0 #ipython
+typing_extensions==3.10.0.2 # tensorflow
+urllib3==1.26.6 # tensorflow
+wcwidth==0.2.5 #prompt-toolkit
+werkzeug==1.0.1 # tensorflow
+wheel>=0.36.2 #installed when creating an environment
+wrapt==1.12.1 # tensorflow
+xz==5.2.5 #installed when creating an environment
+yaml==0.2.5 # pyyaml
+yarl==1.6.3 # tensorflow
+zipp==3.6.0 # tensorflow
+zlib==1.2.11 #installed when creating an environment
+zstd==1.4.9 # libtiff

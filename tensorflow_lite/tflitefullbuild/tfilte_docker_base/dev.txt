@@ -1,0 +1,13 @@
+docker run -it --name grayskull --rm -v "$(pwd)":/data 'tensorflow/tensorflow:latest-devel' bin/bash
+
+PIP_ROOT_USER_ACTION=ignore
+TENSORFLOWDIR=tensorflow_src/tensorflow/lite/tools/pip_package
+PYTHON_VER='python3.7'
+NUM_JOBS= # Add a number here to limit the amount of cpu cores the build will use. 
+
+apt-get update && \
+apt-get install -y cmake build-essential && \
+python3 -m pip install -U pip && \
+python3 -m pip install -U pybind11 numpy Pillow
+
+BUILD_NUM_JOBS=$NUM_JOBS PYTHON=$PYTHON_VER $TENSORFLOWDIR/build_pip_package_with_cmake.sh native
