@@ -13,43 +13,20 @@ ENV PYTHONENV='3.7'
 ENV CONDAREQS='/data/conda-requirements.txt'
 ENV ENVFILE='/data/environment.yml'
 ENV CONDARC='/opt/conda/.condarc'
-# Add a number below to limit the amount of cpu cores the build will use. If this value is blank, all cores will be used.
-ENV NUM_JOBS=''
-
-ENV BAZEL_VERSION='5.1.1'
-ENV DISABLE_BAZEL_WRAPPER='1'
-
 ADD --link --keep-git-dir=false https://github.com/tensorflow/tensorflow.git#v$TENSORFLOWVER /tensorflow_src
-ADD --link --chmod=755 https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-linux-x86_64 /usr/local/bin/bazel
 
-RUN <<EOF
-    set -x
-    apt-get update
-    apt-get install -y build-essential
-EOF
+############### bazel
+# Use this section for bazel. Comment out the cmake section.
 
+# ENV BAZEL_VERSION='5.1.1'
+# ENV DISABLE_BAZEL_WRAPPER='1'
+
+#ADD --link --chmod=755 https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-linux-x86_64 /usr/local/bin/bazel
 # RUN <<EOF
     # set -x
-    # echo 'tzdata tzdata/Areas select Europe' | debconf-set-selections
-    # echo 'tzdata tzdata/Zones/Europe select London' | debconf-set-selections
     # apt-get update
-    # apt-get install -y cmake build-essential
+    # apt-get install -y build-essential
 # EOF
-
-RUN <<EOF
-    set -x
-    cat > $CONDARC << CON
-channels:
-  - anaconda
-  - defaults
-CON
-    mamba create --name $CONDAENV -y python=$PYTHONENV
-    mamba init bash
-    . ~/.bashrc
-    . activate $CONDAENV
-    python3 -m pip install -U pip pybind11 numpy pillow
-    $TENSORFLOWDIR/build_pip_package_with_bazel.sh native
-EOF
 
 # RUN <<EOF
     # set -x
@@ -58,15 +35,45 @@ EOF
   # - anaconda
   # - intel
   # - defaults
-# pip_interop_enabled: True
 # CON
     # mamba create --name $CONDAENV -y python=$PYTHONENV
     # mamba init bash
     # . ~/.bashrc
     # . activate $CONDAENV
-    # python3 -m pip install -U pip pybind11 numpy pillow
-    # BUILD_NUM_JOBS=$NUM_JOBS $TENSORFLOWDIR/build_pip_package_with_cmake.sh native
+    # python3 -m pip install -U pybind11 numpy pillow
+    # $TENSORFLOWDIR/build_pip_package_with_bazel.sh native
 # EOF
+
+############### cmake
+# Use this section for cmake. Comment out the bazel section.
+
+# Add a number below to limit the amount of cpu cores the build will use. If this value is blank, all cores will be used.
+ENV NUM_JOBS=''
+
+RUN <<EOF
+    set -x
+    echo 'tzdata tzdata/Areas select Europe' | debconf-set-selections
+    echo 'tzdata tzdata/Zones/Europe select London' | debconf-set-selections
+    apt-get update
+    apt-get install -y cmake build-essential
+EOF
+
+RUN <<EOF
+    set -x
+    cat > $CONDARC << CON
+channels:
+  - anaconda
+  - intel
+  - defaults
+pip_interop_enabled: True
+CON
+    mamba create --name $CONDAENV -y python=$PYTHONENV
+    mamba init bash
+    . ~/.bashrc
+    . activate $CONDAENV
+    python3 -m pip install -U pybind11 numpy pillow
+    BUILD_NUM_JOBS=$NUM_JOBS $TENSORFLOWDIR/build_pip_package_with_cmake.sh native
+EOF
 
 ###############
 
@@ -89,7 +96,6 @@ RUN <<EOF
     set -x
     mamba env create -v -f /$ENVFILE 
     mamba run -n $CONDAENV python3 -m pip install --no-cache-dir *.whl
-    mamba run -n $CONDAENV mamba clean -afy
     # Use conda-pack to create a standalone environment in /venv
     mamba install -y -c conda-forge conda-pack
     conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar
