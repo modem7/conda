@@ -50,7 +50,9 @@ ADD --link --keep-git-dir=false https://github.com/tensorflow/tensorflow.git#v$T
 # Add a number below to limit the amount of cpu cores the build will use. If this value is blank, all cores will be used.
 ENV NUM_JOBS=''
 
-RUN <<EOF
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \ 
+    <<EOF
     set -x
     echo 'tzdata tzdata/Areas select Europe' | debconf-set-selections
     echo 'tzdata tzdata/Zones/Europe select London' | debconf-set-selections
@@ -58,7 +60,8 @@ RUN <<EOF
     apt-get install -y cmake build-essential
 EOF
 
-RUN <<EOF
+RUN --mount=type=cache,target=/opt/conda/pkgs \
+    <<EOF
     set -x
     cat > $CONDARC << CON
 channels:
@@ -71,7 +74,7 @@ CON
     mamba init bash
     . ~/.bashrc
     . activate $CONDAENV
-    python3 -m pip install -U pybind11 numpy pillow
+    python3 -m pip install --no-cache -U pybind11 numpy pillow
     BUILD_NUM_JOBS=$NUM_JOBS $TENSORFLOWDIR/build_pip_package_with_cmake.sh native
 EOF
 
@@ -92,10 +95,11 @@ ENV ENVFILE='environment.yml'
 COPY --link $ENVFILE /wheel/*.whl /
 COPY --link --from=tflite-builder /tensorflow_src/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3/dist/tflite_runtime*.whl /
 
-RUN <<EOF
+RUN --mount=type=cache,target=/opt/conda/pkgs \
+    <<EOF
     set -x
-    mamba env create -v -f /$ENVFILE 
-    mamba run -n $CONDAENV python3 -m pip install --no-cache-dir *.whl
+    mamba env create -v -f $ENVFILE 
+    mamba run -n $CONDAENV python3 -m pip install --no-cache *.whl
     # Use conda-pack to create a standalone environment in /venv
     mamba install -y -c conda-forge conda-pack
     conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar
@@ -105,18 +109,6 @@ RUN <<EOF
     # We've put venv in same path it'll be in final image, so now fix up paths
     /venv/bin/conda-unpack
 EOF
-
-# # Use conda-pack to create a standalone environment in /venv:
-# RUN <<EOF
-    # set -x
-    # mamba install -y -c conda-forge conda-pack
-    # conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar
-    # mkdir /venv && cd /venv
-    # tar xf /tmp/env.tar
-    # rm /tmp/env.tar
-    # # We've put venv in same path it'll be in final image, so now fix up paths
-    # /venv/bin/conda-unpack
-# EOF
 
 ###############
 
