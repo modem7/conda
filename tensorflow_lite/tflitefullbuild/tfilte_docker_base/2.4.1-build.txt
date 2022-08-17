@@ -1,0 +1,31 @@
+CONDAENV="tensorflow"
+TENLITE="tlitebuild"
+PYTHONENV="3.7"
+CONDAREQS="/data/conda-requirements.txt"
+ENVFILE="/data/environment.yml"
+CONDARC="/opt/conda/.condarc"
+TENSORFLOWDIR="tensorflow_src/tensorflow/lite/tools/pip_package"
+PYTHON_VER="python3.7"
+
+cat > $CONDARC << EOF
+channels:
+  - anaconda
+  - defaults
+EOF
+
+mamba create --name $TENLITE -y python=$PYTHONENV && \
+mamba init bash && \
+source ~/.bashrc && \
+source activate $TENLITE
+
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y swig libjpeg-dev zlib1g-dev curl zip unzip build-essential && \
+python3 -m pip install -U pybind11 numpy Pillow
+
+git clone --depth 1 --branch v2.4.1 https://github.com/tensorflow/tensorflow.git tensorflow_src && \
+cd tensorflow_src/
+
+tensorflow_src/tensorflow/lite/tools/make/download_dependencies.sh && \
+PYTHON=$PYTHON_VER tensorflow_src/tensorflow/lite/tools/pip_package/build_pip_package.sh
+
+/tensorflow_src/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3.7/dist/tflite_runtime-2.4.1-cp37-cp37m-linux_x86_64.whl
