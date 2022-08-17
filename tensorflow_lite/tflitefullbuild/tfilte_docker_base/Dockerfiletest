@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE='1'
 ENV PYTHONUNBUFFERED='1'
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TENSORFLOWDIR='tensorflow_src/tensorflow/lite/tools/pip_package'
-ENV TENSORFLOWVER='2.9.1'
+ENV TENSORFLOWVER='2.4.1'
 ENV CONDAENV='tensorflow'
 ENV PYTHONENV='3.7'
 ENV CONDAREQS='/data/conda-requirements.txt'
@@ -54,10 +54,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \ 
     <<EOF
     set -x
-    echo 'tzdata tzdata/Areas select Europe' | debconf-set-selections
-    echo 'tzdata tzdata/Zones/Europe select London' | debconf-set-selections
+    TZ=Europe/London
     apt-get update
-    apt-get install -y cmake build-essential
+    apt-get install -y cmake build-essential swig libjpeg-dev zlib1g-dev
 EOF
 
 RUN --mount=type=cache,target=/opt/conda/pkgs \
