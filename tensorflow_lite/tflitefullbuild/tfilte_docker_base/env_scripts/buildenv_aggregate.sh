@@ -43,7 +43,7 @@ echo "### Exporting Conda env file..."
 mamba env export --no-builds -n $CONDAENV > $ENVFILEAGG
 
 echo ""
-echo "### Created environment file in $ENVFILEML"
+echo "### Created environment file in $ENVFILEAGG"
 echo ""
 date -ud "@$SECONDS" "+Time taken to run script: %H:%M:%S"
 
