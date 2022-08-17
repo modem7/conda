@@ -18,12 +18,14 @@ EOF
 trap 'kill -TERM $PID' TERM INT
 # Create environment
 echo "### Creating environment..."
-mamba create -v --no-deps --name $CONDAENV -y --file=$CONDAREQSCONNECT --file=$CONDAREQSDEPLOY --file=$CONDAREQSML python=$PYTHONENV &
+mamba create -v --no-deps --name $CONDAENV -y python=$PYTHONENV nomkl numpy=1.19.2 &
 PID=$!
 wait $PID
 trap - TERM INT
 wait $PID
 EXIT_STATUS=$?
+
+mamba install -v --no-deps --name $CONDAENV -y --file=$CONDAREQSCONNECT --file=$CONDAREQSDEPLOY --file=$CONDAREQSML python=$PYTHONENV
 
 # # Initialise Shell
 # echo "### Initialising shell..."
