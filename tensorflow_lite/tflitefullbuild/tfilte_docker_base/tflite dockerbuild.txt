@@ -1,0 +1,78 @@
+https://github.com/tensorflow/tensorflow/blob/v2.4.1/tensorflow/lite/tools/pip_package/Makefile
+
+
+docker run --user 1000:100 \
+        --rm --interactive --tty \
+        --env "PYTHON=python3.7" \
+        --env "TENSORFLOW_TARGET=native" \
+        --env "BUILD_DEB=n" \
+        --env "VERSION_SUFFIX=" \
+        --volume /tmp/tflite/tensorflow/tensorflow/lite/tools/pip_package/../../../..:/tensorflow \
+        --volume /tmp/tflite/tensorflow/tensorflow/lite/tools/pip_package/out/python3.7/debian-buster:/out \
+        "tflite-runtime-builder-debian-buster" \
+        /bin/bash -c "/tensorflow/tensorflow/lite/tools/pip_package/build_pip_package.sh && \
+                      (cp /tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/*.deb \
+                          /tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3.7/dist/{*.whl,*.tar.gz} \
+                          /out 2>/dev/null || true)"
+
+
+
+
+cd /tmp/tflite/tensorflow/tensorflow/lite/tools/pip_package
+
+does setting PYTHON=python3.7 change apt-get?
+
+apt-get update
+apt-get install -y \
+      debhelper \
+      dh-python \
+      pybind11-dev \
+      python3-all \
+      python3-setuptools \
+      python3-wheel \
+      python3-numpy \
+      python3-pip \
+      libpython3-dev \
+      zlib1g-dev  \
+      curl \
+      unzip \
+      git
+      
+pip3 install pip --upgrade && pip3 install pybind11
+      
+/tensorflow/tensorflow/lite/tools/pip_package/build_pip_package.sh
+
+(cp /tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/*.deb \
+    /tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3.7/dist/{*.whl,*.tar.gz} \
+    /out 2>/dev/null || true)
+
+################
+
+--env "PYTHON=python3.7" \
+--env "TENSORFLOW_TARGET=native" \ # (empty or native)
+--env "BUILD_DEB=n" \ # (leave alone/don't include)
+--env "VERSION_SUFFIX=" \ # (leave alone/don't include)
+--env "OUT_DIR=<path>"
+    
+# base tensorflow repo location
+--volume /tmp/tflite/tensorflow/tensorflow/lite/tools/pip_package/../../../..:/tensorflow
+
+# output directory location
+--volume /tmp/tflite/tensorflow/tensorflow/lite/tools/pip_package/out/python3.7/debian-buster:/out
+
+################
+
+	mkdir -p $(OUT_DIR)
+	docker run --user $(shell id -u):$(shell id -g) \
+		--rm --interactive $(shell tty -s && echo --tty) \
+		--env "PYTHON=$(PYTHON)" \
+		--env "TENSORFLOW_TARGET=$(TENSORFLOW_TARGET)" \
+		--env "BUILD_DEB=$(BUILD_DEB)" \
+		--env "VERSION_SUFFIX=$(VERSION_SUFFIX)" \
+		--volume $(TENSORFLOW_DIR):/tensorflow \
+		--volume $(OUT_DIR):/out \
+		$(TAG_IMAGE) \
+		/bin/bash -c "/tensorflow/tensorflow/lite/tools/pip_package/build_pip_package.sh && \
+		              (cp /tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/*.deb \
+		                  /tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/${PYTHON}/dist/{*.whl,*.tar.gz} \
+		                  /out 2>/dev/null || true)"
