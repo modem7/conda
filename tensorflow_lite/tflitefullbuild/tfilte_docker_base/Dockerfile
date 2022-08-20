@@ -33,7 +33,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
     apt-get update
     DEBIAN_FRONTEND=noninteractive
-    apt-get install -y build-essential curl libjpeg-dev swig unzip zip zlib1g-dev
+    apt-get install -y build-essential curl libjpeg-dev swig unzip zip zlib1g-dev python$PYTHONENV-dev python3-numpy
 EOF
 
 RUN --mount=type=cache,id=$CONDAENV,target=/opt/conda/pkgs,sharing=locked \
