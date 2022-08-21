@@ -1,0 +1,5 @@
+https://github.com/crate/crate-python
+
+docker run -it --name grayskull2 --rm -v "$(pwd)":/data 'python:3.10.6' sh
+
+python setup.py bdist_wheel -d wheel/
