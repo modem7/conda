@@ -1,0 +1,46 @@
+apt-get install -y debhelper dh-python pybind11-dev python3-setuptools python3-wheel python3-numpy python3-pip libpython3-dev zlib1g-dev curl unzip git
+
+
+
+
+
+IMAGE=condaforge/mambaforge-pypy3:4.12.0-0
+
+apt-get update && apt-get install python3.7-dev
+
+
+IMAGE=condaforge/mambaforge-pypy3:4.12.0-2
+GIT_DIR=$(pwd)
+PYTHON=python3.7
+TENSORFLOW_TARGET=native # (empty or native)
+OUT_DIR=wheel
+TENSORFLOW_DIR=tensorflow
+
+docker run \
+    --rm -it \
+    -e PYTHON="$PYTHON" \
+    -e DEBIAN_FRONTEND="noninteractive" \
+    -e TZ="Europe/London" \
+    -e TENSORFLOW_TARGET="$TENSORFLOW_TARGET" \
+     $IMAGE /bin/bash
+
+CONDARC='/opt/conda/.condarc'
+CONDAENV='tensorflow'
+
+cat > $CONDARC << CON
+channels:
+  - anaconda
+  - defaults
+CON
+
+
+apt-get update && apt-get install -y debhelper dh-python pybind11-dev python3-all python3-setuptools python3-wheel python3-numpy python3-pip libpython3-dev zlib1g-dev curl unzip git && \
+git clone --depth 1 --branch v2.4.1 https://github.com/tensorflow/tensorflow.git && \
+mamba create --name $CONDAENV -y python=3.7 && \
+mamba init bash && \
+. ~/.bashrc && \
+. activate $CONDAENV && \
+python3 -m pip install -U pybind11 numpy pillow
+
+
+/tensorflow/tensorflow/lite/tools/pip_package/build_pip_package.sh

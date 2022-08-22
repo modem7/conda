@@ -15,12 +15,10 @@ docker run --user 1000:100 \
                           /tensorflow/tensorflow/lite/tools/pip_package/gen/tflite_pip/python3.7/dist/{*.whl,*.tar.gz} \
                           /out 2>/dev/null || true)"
 
-
+apt-get install -y debhelper dh-python pybind11-dev python3-all python3-setuptools python3-wheel python3-numpy python3-pip libpython3-dev zlib1g-dev curl unzip git
 
 
 cd /tmp/tflite/tensorflow/tensorflow/lite/tools/pip_package
-
-does setting PYTHON=python3.7 change apt-get?
 
 apt-get update
 apt-get install -y \
