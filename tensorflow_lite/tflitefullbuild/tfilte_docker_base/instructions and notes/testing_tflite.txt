@@ -1,4 +1,5 @@
 # https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/examples/python/
+# https://www.tensorflow.org/lite/guide/python
 
 docker run -it --name grayskull2 --rm -v TFBUILDCONDA:/opt/conda/pkgs -v "$(pwd)":/data 'condaforge/mambaforge-pypy3' bin/bash
 
