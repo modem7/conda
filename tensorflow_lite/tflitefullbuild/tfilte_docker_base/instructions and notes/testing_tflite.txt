@@ -1,16 +1,18 @@
 # https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/examples/python/
 # https://www.tensorflow.org/lite/guide/python
 
+cd "/var/hda/files/drives/drive14/Test/Git Projects/conda/tensorflow_lite/tflitefullbuild/tfilte_docker_base"
+
 docker run -it --name grayskull2 --rm -v TFBUILDCONDA:/opt/conda/pkgs -v "$(pwd)":/data 'condaforge/mambaforge-pypy3' bin/bash
 
-mamba env create -v conda_package_handling -f /data/environment_aggregate.yml && \
+
+
+mamba env create -v -f /data/environment_aggregate.yml && \
 mamba init bash && \
 . ~/.bashrc && \
 . activate tensorflow
 
-mamba create -y --name tensorflow python=3.7
-
-python3 -m pip install /data/wheel/tflite_runtime-2.4.1-cp37-cp37m-linux_x86_64.whl pybind11 numpy pillow
+python3 -m pip install /data/wheel/tflite_runtime-2.4.1-cp37-cp37m-linux_x86_64.whl
 
 apt update && apt install curl wget nano zip unzip
 
@@ -19,8 +21,8 @@ curl https://storage.googleapis.com/download.tensorflow.org/models/mobilenet_v1_
 curl https://storage.googleapis.com/download.tensorflow.org/models/mobilenet_v1_1.0_224_frozen.tgz  | tar xzv -C /tmp  mobilenet_v1_1.0_224/labels.txt && \
 mv /tmp/mobilenet_v1_1.0_224/labels.txt /tmp/
 
-cp /data/label_image.py /
 
+cp /data/label_image.py / && \
 python3 label_image.py \
   --model_file /tmp/mobilenet_v1_1.0_224.tflite \
   --label_file /tmp/labels.txt \

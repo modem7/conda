@@ -18,10 +18,11 @@ VOLUME=CONDACACHE
 export CONDAREQSCONNECT="/data/env_scripts/dependencies_connect.txt"
 export CONDAREQSDEPLOY="/data/env_scripts/dependencies_deploy.txt"
 export CONDAREQSML="/data/env_scripts/dependencies_ml.txt"
+export CONDAREQSTF="/data/env_scripts/dependencies_tfl.txt"
 export ENVFILEAGG="/data/environment_aggregate.yml"
 
 # Generate Environment files
-docker run --rm -v $VOLUME:/opt/conda/pkgs:cached -v "$(pwd)":/data -e CONDAENV -e PYTHONENV -e CONDARC -e CONDAREQSCONNECT -e CONDAREQSDEPLOY -e CONDAREQSML -e ENVFILEAGG $IMGNAME /bin/bash -c "/data/env_scripts/buildenv_aggregate.sh"
+docker run --rm -v $VOLUME:/opt/conda/pkgs:cached -v "$(pwd)":/data -e CONDAENV -e PYTHONENV -e CONDARC -e CONDAREQSCONNECT -e CONDAREQSDEPLOY -e CONDAREQSML -e CONDAREQSTF -e ENVFILEAGG $IMGNAME /bin/bash -c "/data/env_scripts/buildenv_aggregate.sh"
 
 echo ""
 echo "###################"

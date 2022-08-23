@@ -6,6 +6,16 @@ set -e
 echo "### Setting system variables..."
 SECONDS="0"
 
+# # Set user variables
+# echo "### Setting user variables..."
+# CONDAENV="tensorflow"
+# PYTHONENV="3.7"
+# CONDAREQS="/data/env_scripts/dependencies_ml.txt"
+# #PIPUPGRADE="pip setuptools wheel"
+# #PIPREQS="/data/pip-requirements.txt"
+# ENVFILE="/data/environment_ml.yml"
+# CONDARC="/opt/conda/.condarc"
+
 # Create .condarc file
 echo "### Creating .condarc..."
 cat > $CONDARC << EOF
@@ -18,7 +28,7 @@ EOF
 trap 'kill -TERM $PID' TERM INT
 # Create environment
 echo "### Creating environment..."
-mamba create -v --no-deps --name $CONDAENV -y --file=$CONDAREQSCONNECT --file=$CONDAREQSDEPLOY --file=$CONDAREQSML --file=$CONDAREQSTF python=$PYTHONENV &
+mamba create -v --no-deps --name $CONDAENV -y --file $CONDAREQSTF python=$PYTHONENV &
 PID=$!
 wait $PID
 trap - TERM INT
@@ -40,10 +50,13 @@ EXIT_STATUS=$?
 
 # Export environment file
 echo "### Exporting Conda env file..."
-mamba env export --from-history -n $CONDAENV > $ENVFILEAGG
+mamba env export --no-builds -n $CONDAENV > $ENVFILETF
+
+# Install additional packages that conflict otherwise
+#mamba install -y libgfortran5==9.3.0
 
 echo ""
-echo "### Created environment file in $ENVFILEAGG"
+echo "### Created environment file in $ENVFILETF"
 echo ""
 date -ud "@$SECONDS" "+Time taken to run script: %H:%M:%S"
 

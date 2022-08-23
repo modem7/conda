@@ -26,11 +26,16 @@ export ENVFILEDEPLOY="/data/environment_deploy.yml"
 export CONDAREQSML="/data/env_scripts/dependencies_ml.txt"
 export ENVFILEML="/data/environment_ml.yml"
 
+# TFL
+export CONDAREQSTF="/data/env_scripts/dependencies_tfl.txt"
+export ENVFILETF="/data/environment_tfl.yml"
+
 # Generate Environment files
 docker pull $IMGNAME
 docker run --rm -v $VOLUME:/opt/conda/pkgs:cached -v "$(pwd)":/data -e CONDAENV -e PYTHONENV -e CONDARC -e CONDAREQSCONNECT -e ENVFILECONNECT $IMGNAME /bin/bash -c "/data/env_scripts/buildenv_connect.sh" &
 docker run --rm -v $VOLUME:/opt/conda/pkgs:cached -v "$(pwd)":/data -e CONDAENV -e PYTHONENV -e CONDARC -e CONDAREQSDEPLOY -e ENVFILEDEPLOY $IMGNAME /bin/bash -c "/data/env_scripts/buildenv_deploy.sh" &
 docker run --rm -v $VOLUME:/opt/conda/pkgs:cached -v "$(pwd)":/data -e CONDAENV -e PYTHONENV -e CONDARC -e CONDAREQSML -e ENVFILEML $IMGNAME /bin/bash -c "/data/env_scripts/buildenv_ml.sh" &
+docker run --rm -v $VOLUME:/opt/conda/pkgs:cached -v "$(pwd)":/data -e CONDAENV -e PYTHONENV -e CONDARC -e CONDAREQSTF -e ENVFILETF $IMGNAME /bin/bash -c "/data/env_scripts/buildenv_tfl.sh"
 wait
 
 # If the above breaks due to the cache, try this instead

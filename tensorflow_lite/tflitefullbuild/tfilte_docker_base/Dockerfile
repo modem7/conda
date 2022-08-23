@@ -81,7 +81,7 @@ COPY --link --from=tflite-builder $GITDIR/pip_package/gen/tflite_pip/python$PYTH
 RUN --mount=type=cache,id=$CONDAENV,target=/opt/conda/pkgs,sharing=locked \
     <<EOF
     set -x
-    mamba env create -v conda_package_handling -f $ENVFILE 
+    mamba env create -v conda_package_handling pybind11 -f $ENVFILE 
     mamba run -n $CONDAENV python3 -m pip install --no-cache *.whl
     # Use conda-pack to create a standalone environment in /venv
     mamba install -y -c anaconda conda-pack

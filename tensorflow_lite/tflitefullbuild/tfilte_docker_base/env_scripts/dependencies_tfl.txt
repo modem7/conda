@@ -1,0 +1,4 @@
+#nomkl
+conda-package-handling==1.8.1
+pybind11>=2.4.3
+python=3.7.4
