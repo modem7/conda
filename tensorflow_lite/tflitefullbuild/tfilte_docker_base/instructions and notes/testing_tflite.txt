@@ -16,7 +16,6 @@ asciinema rec
 
 exec bash
 
-
 apt update && apt install -y curl
 
 mamba env create -v -f /data/environment_aggregate.yml && \
