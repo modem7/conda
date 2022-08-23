@@ -6,6 +6,18 @@ cd "/var/hda/files/drives/drive14/Test/Git Projects/conda/tensorflow_lite/tflite
 docker run -it --name grayskull2 --rm -v TFBUILDCONDA:/opt/conda/pkgs -v "$(pwd)":/data 'condaforge/mambaforge-pypy3' bin/bash
 
 
+apt update && apt install -y software-properties-common && \
+apt-add-repository -y ppa:zanchey/asciinema && \
+apt-get update && \
+apt-get install -y asciinema
+
+
+asciinema rec
+
+exec bash
+
+
+apt update && apt install -y curl
 
 mamba env create -v -f /data/environment_aggregate.yml && \
 mamba init bash && \
@@ -14,7 +26,6 @@ mamba init bash && \
 
 python3 -m pip install /data/wheel/tflite_runtime-2.4.1-cp37-cp37m-linux_x86_64.whl
 
-apt update && apt install curl wget nano zip unzip
 
 curl https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/lite/examples/label_image/testdata/grace_hopper.bmp > /tmp/grace_hopper.bmp && \
 curl https://storage.googleapis.com/download.tensorflow.org/models/mobilenet_v1_2018_02_22/mobilenet_v1_1.0_224.tgz | tar xzv -C /tmp && \
