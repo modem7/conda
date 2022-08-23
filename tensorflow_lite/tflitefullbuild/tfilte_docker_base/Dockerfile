@@ -90,7 +90,7 @@ EOF
 ###############
 # envbuild
 
-FROM condaforge/mambaforge-pypy3:4.13.0-1 AS envbuild
+FROM condaforge/mambaforge:4.13.0-1 AS envbuild
 
 # System Env
 ENV PIP_ROOT_USER_ACTION='ignore'
