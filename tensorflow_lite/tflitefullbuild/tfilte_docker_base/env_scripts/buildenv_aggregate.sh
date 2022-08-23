@@ -18,7 +18,7 @@ EOF
 trap 'kill -TERM $PID' TERM INT
 # Create environment
 echo "### Creating environment..."
-mamba create -v --no-deps --name $CONDAENV -y --file=$CONDAREQSCONNECT --file=$CONDAREQSDEPLOY --file=$CONDAREQSML --file=$CONDAREQSTF python=$PYTHONENV &
+mamba create -v --no-deps --name $CONDAENV -y --file=$CONDAREQSTF --file=$CONDAREQSCONNECT --file=$CONDAREQSDEPLOY --file=$CONDAREQSML python=$PYTHONENV &
 PID=$!
 wait $PID
 trap - TERM INT

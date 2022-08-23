@@ -1,11 +1,11 @@
 CONDAENV="tensorflow"
 TENLITE="tlitebuild"
-PYTHONENV="3.7"
+PYTHONENV="3.7.4"
 CONDAREQS="/data/conda-requirements.txt"
 ENVFILE="/data/environment.yml"
 CONDARC="/opt/conda/.condarc"
 TENSORFLOWDIR="tensorflow_src/tensorflow/lite/tools/pip_package"
-PYTHON_VER="python3.7"
+PYTHON_VER="python3.7.4"
 
 cat > $CONDARC << EOF
 channels:

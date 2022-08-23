@@ -6,15 +6,12 @@ cd "/var/hda/files/drives/drive14/Test/Git Projects/conda/tensorflow_lite/tflite
 docker run -it --name grayskull2 --rm -v TFBUILDCONDA:/opt/conda/pkgs -v "$(pwd)":/data 'condaforge/mambaforge-pypy3' bin/bash
 
 
-apt update && apt install -y software-properties-common && \
-apt-add-repository -y ppa:zanchey/asciinema && \
-apt-get update && \
-apt-get install -y asciinema
+pip3 install asciinema
+
+asciinema rec -c /bin/bash
 
 
-asciinema rec
 
-exec bash
 
 apt update && apt install -y curl
 

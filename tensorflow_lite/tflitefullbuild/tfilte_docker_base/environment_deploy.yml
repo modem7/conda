@@ -49,7 +49,6 @@ dependencies:
   - parso=0.5.1
   - pexpect=4.7.0
   - pickleshare=0.7.5
-  - pip=19.3.1
   - pluggy=0.13.1
   - prompt_toolkit=2.0.10
   - protobuf=3.19.1
@@ -68,7 +67,6 @@ dependencies:
   - pytz=2021.3
   - pyzmq=18.1.0
   - requests=2.27.1
-  - setuptools=41.4.0
   - six=1.16.0
   - sqlalchemy=1.4.32
   - sqlite=3.33.0
@@ -79,7 +77,6 @@ dependencies:
   - typing_extensions=4.1.1
   - urllib3=1.26.9
   - wcwidth=0.1.7
-  - wheel=0.33.6
   - xz=5.2.4
   - yarl=1.6.3
   - zeromq=4.3.1
