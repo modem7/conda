@@ -1,10 +1,10 @@
 #!/bin/bash --login
 
-set -e
+source /venv/bin/activate
+
+set -euo pipefail
 
 # https://github.com/conda-forge/docker-images/blob/main/scripts/entrypoint
-
-source /venv/bin/activate
 
 # Run whatever the user wants.
 echo -e "\n\e[4m### Environment Activated ###\e[0m"
