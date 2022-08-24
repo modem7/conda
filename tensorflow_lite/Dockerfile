@@ -34,7 +34,7 @@ ADD --link --keep-git-dir=false https://github.com/tensorflow/tensorflow.git#v$T
 RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
     <<EOF
-    set -x
+    set -xe
     rm -fv /etc/apt/apt.conf.d/docker-clean
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
     apt-get update
@@ -91,7 +91,7 @@ COPY --link --from=tflite-builder $GITDIR/pip_package/gen/tflite_pip/$PYTHONDIR/
 RUN --mount=type=cache,id=$CONDAENV,target=/opt/conda/pkgs,sharing=locked \
     --mount=type=cache,id=pip,target=/root/.cache/pip \
     <<EOF
-    set -x
+    set -xe
     mamba env create -v -f $ENVFILE
     # Add additional packages to the wheel folder so it installs at this step.
     mamba run -n $CONDAENV python3 -m pip install *.whl
@@ -124,7 +124,7 @@ COPY --link --chmod=755 entrypoint.sh /entrypoint.sh
 # RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
     # --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
     # <<EOF
-    # set -x
+    # set -xe
     # rm -fv /etc/apt/apt.conf.d/docker-clean
     # echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
     # apt-get update
