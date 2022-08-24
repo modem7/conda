@@ -5,8 +5,12 @@
 source /venv/bin/activate
 
 # Run whatever the user wants.
-echo "Import Numpy"
-python -c "import numpy; print('success')"
+echo "Environment Activated"
 echo ""
+echo -e "Current environment is \n$PATH"
+
+# echo "Import Numpy"
+# python -c "import numpy; print('success')"
+# echo ""
 
 exec "$@"

@@ -133,14 +133,16 @@ EOF
 # for us.
 FROM debian:buster-slim AS runtime
 
-# Copy entrypoint script
-COPY --link --chmod=755 entrypoint.sh /entrypoint.sh
-
 # Copy /venv from the previous stage:
 COPY --link --from=envbuild /venv /venv
+
+# Copy entrypoint script
+COPY --link --chmod=755 entrypoint.sh /entrypoint.sh
 
 # When image is run, run the code with the environment activated:
 SHELL ["/bin/bash", "-c"]
 
 #ENTRYPOINT ["/venv/bin/tini", "-g", "--"]
-CMD ["/entrypoint.sh"]
+# CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD [ "/bin/bash" ]
