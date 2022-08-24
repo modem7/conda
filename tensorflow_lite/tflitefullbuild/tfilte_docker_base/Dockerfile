@@ -30,16 +30,17 @@ ARG GITDIR
 ARG PYTHONENV
 
 ADD --link --keep-git-dir=false https://github.com/tensorflow/tensorflow.git#v$TENSORFLOWVER /tensorflow
-# COPY --link $GITDIR/make/downloads/ $GITDIR/make/downloads/
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
     <<EOF
     set -x
     rm -fv /etc/apt/apt.conf.d/docker-clean
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
     apt-get update
-    apt-get install -y curl \
+    apt-get install -y --no-install-recommends \
+                       build-essential \
+                       curl \
                        debhelper \
                        dh-python \
                        git \
@@ -57,35 +58,11 @@ EOF
 RUN --mount=type=cache,id=pip,target=/root/.cache/pip \
     --mount=type=cache,target=$GITDIR/make/downloads \
     <<EOF
-    python3 -m pip install -U pybind11 tini
+    python3 -m pip install -U pybind11
     export TENSORFLOW_TARGET=native
     export PYTHON=python3.7
     $GITDIR/pip_package/build_pip_package.sh
 EOF
-
-# SHELL ["/bin/bash", "-c"]
-
-# RUN --mount=type=cache,id=$CONDAENV,target=/opt/conda/pkgs,sharing=locked \
-    # --mount=type=cache,id=pip,target=/root/.cache/pip \
-    # <<EOF
-    # set -x
-    # cat > $CONDARC << CON
-# channels:
-  # - anaconda
-  # - defaults
-# CON
-    # mamba create --name $CONDAENV -y python=$PYTHONENV
-    # mamba init bash
-    # . ~/.bashrc
-    # . activate $CONDAENV
-    # python3 -m pip install -U pybind11 numpy pillow
-    # export TENSORFLOW_TARGET=native
-    # export TENSORFLOW_VERSION=1.4.1
-    # export PYTHON=python3.7
-    # export BUILD_DEB=n
-    # export VERSION_SUFFIX=
-    # sh /tensorflow/tensorflow/lite/tools/pip_package/build_pip_package.sh
-# EOF
 
 ###############
 # envbuild
@@ -107,6 +84,7 @@ ARG GITDIR
 
 # Install the package as normal and any packages in /wheel dir:
 COPY --link $ENVFILE /
+# Add additional packages to the wheel folder so it adds them at this step.
 COPY --link wheel/*.whl /
 COPY --link --from=tflite-builder $GITDIR/pip_package/gen/tflite_pip/$PYTHONDIR/dist/tflite_runtime-*.whl /
 
@@ -114,7 +92,8 @@ RUN --mount=type=cache,id=$CONDAENV,target=/opt/conda/pkgs,sharing=locked \
     --mount=type=cache,id=pip,target=/root/.cache/pip \
     <<EOF
     set -x
-    mamba env create -v -f $ENVFILE 
+    mamba env create -v -f $ENVFILE
+    # Add additional packages to the wheel folder so it installs at this step.
     mamba run -n $CONDAENV python3 -m pip install *.whl
     # Use conda-pack to create a standalone environment in /venv
     mamba install -y -c anaconda conda-pack
@@ -140,6 +119,33 @@ COPY --link --from=envbuild /venv /venv
 
 # Copy entrypoint script
 COPY --link --chmod=755 entrypoint.sh /entrypoint.sh
+
+# Uncomment this if you want the ps package which gives better process/troubleshooting visibility
+# RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
+    # --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
+    # <<EOF
+    # set -x
+    # rm -fv /etc/apt/apt.conf.d/docker-clean
+    # echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+    # apt-get update
+    # apt-get --no-install-recommends install -y procps
+# EOF
+
+# System requirements
+### Uncomment these and adjust as required
+
+# System Volumes
+VOLUME /mnt/source
+VOLUME /root/.ssh
+
+# Document ports that need exposing.
+# See the following for more information:
+# https://www.ipspace.net/kb/DockerSvc/10-Exposed.html
+# https://www.ipspace.net/kb/DockerSvc/20-Published.html
+# https://docs.docker.com/engine/reference/run/#expose-incoming-ports
+EXPOSE 9548/tcp
+
+
 
 # When image is run, run the code with the environment activated:
 SHELL ["/bin/bash", "-c"]
