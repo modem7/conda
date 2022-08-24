@@ -132,25 +132,23 @@ COPY --link --chmod=755 entrypoint.sh /entrypoint.sh
 # EOF
 
 # System requirements
-### Uncomment these and adjust as required
+### Adjust as required
 
 # System Volumes
-VOLUME /mnt/source
-VOLUME /root/.ssh
+VOLUME /config
 
 # Document ports that need exposing.
 # See the following for more information:
 # https://www.ipspace.net/kb/DockerSvc/10-Exposed.html
 # https://www.ipspace.net/kb/DockerSvc/20-Published.html
 # https://docs.docker.com/engine/reference/run/#expose-incoming-ports
-EXPOSE 9548/tcp
-
-
+EXPOSE 8282/tcp
+EXPOSE 8282/udp
 
 # When image is run, run the code with the environment activated:
 SHELL ["/bin/bash", "-c"]
-
 ENTRYPOINT ["/tini", "-g", "--", "/entrypoint.sh"]
-# CMD ["/entrypoint.sh"]
-#ENTRYPOINT ["/entrypoint.sh"]
 CMD [ "/bin/bash" ]
+
+# CMD ["/entrypoint.sh"]
+# ENTRYPOINT ["/entrypoint.sh"]

@@ -7,7 +7,7 @@ echo "### Please be patient, this can take 15-20 minutes..."
 
 # Global Envs
 SECONDS="0"
-IMGNAME="condaforge/mambaforge-pypy3:4.13.0-1"
+IMGNAME="condaforge/mambaforge:4.13.0-1"
 export CONDAENV="tensorflow"
 export PYTHONENV="3.7"
 export CONDARC="/opt/conda/.condarc"
