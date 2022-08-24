@@ -57,7 +57,7 @@ EOF
 RUN --mount=type=cache,id=pip,target=/root/.cache/pip \
     --mount=type=cache,target=$GITDIR/make/downloads \
     <<EOF
-    python3 -m pip install -U pybind11
+    python3 -m pip install -U pybind11 tini
     export TENSORFLOW_TARGET=native
     export PYTHON=python3.7
     $GITDIR/pip_package/build_pip_package.sh
@@ -132,6 +132,8 @@ EOF
 # base image since the Conda env also includes Python
 # for us.
 FROM debian:buster-slim AS runtime
+ARG TINI_VERSION='v0.19.0'
+ADD --link --chmod=755 https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 
 # Copy /venv from the previous stage:
 COPY --link --from=envbuild /venv /venv
@@ -142,7 +144,7 @@ COPY --link --chmod=755 entrypoint.sh /entrypoint.sh
 # When image is run, run the code with the environment activated:
 SHELL ["/bin/bash", "-c"]
 
-#ENTRYPOINT ["/venv/bin/tini", "-g", "--"]
+ENTRYPOINT ["/tini", "-g", "--", "/entrypoint.sh"]
 # CMD ["/entrypoint.sh"]
-ENTRYPOINT ["/entrypoint.sh"]
+#ENTRYPOINT ["/entrypoint.sh"]
 CMD [ "/bin/bash" ]
