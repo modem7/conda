@@ -12,15 +12,15 @@ COPY --link --chmod=755 example.conf /config/
 COPY --link --chmod=755 example2.sh /config/
 
 # Uncomment this if you want the ps package which gives better process/troubleshooting visibility
-RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
-    <<EOF
-    set -e
-    rm -fv /etc/apt/apt.conf.d/docker-clean
-    echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-    apt-get update
-    apt-get --no-install-recommends install -y procps
-EOF
+# RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
+    # --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
+    # <<EOF
+    # set -e
+    # rm -fv /etc/apt/apt.conf.d/docker-clean
+    # echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+    # apt-get update
+    # apt-get --no-install-recommends install -y procps
+# EOF
 
 # System requirements
 ### Adjust as required
