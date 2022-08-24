@@ -131,20 +131,6 @@ COPY --link --chmod=755 entrypoint.sh /entrypoint.sh
     # apt-get --no-install-recommends install -y procps
 # EOF
 
-# System requirements
-### Adjust as required
-
-# System Volumes
-VOLUME /config
-
-# Document ports that need exposing.
-# See the following for more information:
-# https://www.ipspace.net/kb/DockerSvc/10-Exposed.html
-# https://www.ipspace.net/kb/DockerSvc/20-Published.html
-# https://docs.docker.com/engine/reference/run/#expose-incoming-ports
-EXPOSE 8282/tcp
-EXPOSE 8282/udp
-
 # When image is run, run the code with the environment activated:
 SHELL ["/bin/bash", "-c"]
 ENTRYPOINT ["/tini", "-g", "--", "/entrypoint.sh"]
