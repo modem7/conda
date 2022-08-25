@@ -10,7 +10,7 @@ ARG GITDIR='/tensorflow/tensorflow/lite/tools'
 ###############
 # tflite-builder
 
-FROM debian:buster-slim as tflite-builder
+FROM debian:buster-slim AS tflite-builder
 
 # System Env
 ENV PIP_ROOT_USER_ACTION='ignore'
@@ -92,7 +92,7 @@ RUN --mount=type=cache,id=$CONDAENV,target=/opt/conda/pkgs,sharing=locked \
     --mount=type=cache,id=pip,target=/root/.cache/pip \
     <<EOF
     set -xe
-    mamba env create -vf $ENVFILE
+    mamba env create -f $ENVFILE
     # Add additional packages to the wheel folder so it installs at this step.
     mamba run -n $CONDAENV python3 -m pip install *.whl
     # Use conda-pack to create a standalone environment in /venv
