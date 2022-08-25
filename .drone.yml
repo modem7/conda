@@ -19,6 +19,7 @@ steps:
     compress: true
     no_cache: false
     # build_args: BUILDKIT_INLINE_CACHE=1 # enabling this causes an implicit cache-to: inline
+    build_args: buildinfo-attrs=true
     cache_from: 
       - modem7/conda:latest
       - modem7/conda:buildcache
