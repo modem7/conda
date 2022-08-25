@@ -1,0 +1,44 @@
+---
+
+kind: pipeline
+type: docker
+name: FullBuild
+
+platform:
+  os: linux
+  arch: amd64
+  
+steps:
+- name: FullBuild
+  image: thegeeklab/drone-docker-buildx
+  privileged: true
+
+  settings:
+    repo: modem7/conda
+    purge: true
+    compress: true
+    no_cache: false
+    build_args: BUILDKIT_INLINE_CACHE=1
+    cache_from: modem7/conda:latest
+    dockerfile: tensorflow_lite/Dockerfile
+    context: tensorflow_lite/
+    platforms: # if it doesn't work run docker run --privileged --rm tonistiigi/binfmt --install all
+      - linux/amd64
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    tags:
+      - latest
+
+- name: slack
+  image: themaz/drone-slack
+  settings:
+    webhook:
+      from_secret: slack_hook
+  when:
+    status: [ success, failure ]
+
+trigger:
+  event:
+    - custom

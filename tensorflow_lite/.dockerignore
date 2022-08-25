@@ -3,6 +3,7 @@
 pack/
 venv/
 env_scripts/
+tensorflow/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
