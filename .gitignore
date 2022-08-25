@@ -1,2 +1,3 @@
-# generated files
-pack/*
+tensorflow_lite/pack/
+tensorflow_lite/venv/
+tensorflow_lite/tensorflow/
