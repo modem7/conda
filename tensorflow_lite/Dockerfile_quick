@@ -22,14 +22,13 @@ ARG CONDAENV
 ARG PYTHONENV
 ARG PYTHONDIR
 ARG TENSORFLOWDIR
-ENV ENVFILE='environment_aggregate.yml'
 ARG GITDIR
+ENV ENVFILE='environment_aggregate.yml'
 
 # Install the package as normal and any packages in /wheel dir:
 COPY --link $ENVFILE /
 # Add additional packages to the wheel folder so it adds them at this step.
-COPY --link wheel/*.whl /
-COPY --link wheel/tflite/*.whl /
+COPY --link wheel/*.whl wheel/tflite/*.whl /
 
 RUN --mount=type=cache,id=$CONDAENV,target=/opt/conda/pkgs,sharing=locked \
     --mount=type=cache,id=pip,target=/root/.cache/pip \
