@@ -5,34 +5,50 @@ set -euo pipefail
 # System envs
 GITDIR='/tensorflow/tensorflow/lite/tools/pip_package'
 DEBIAN_FRONTEND=noninteractive
-PIP_ROOT_USER_ACTION='ignore'
 
-# Update apt and download required packages
+# Update apt
 apt-get update
+
+# Install basic packages
 apt-get install -y --no-install-recommends \
-                   build-essential \
-                   curl \
-                   debhelper \
-                   dh-python \
-                   git \
-                   libpython3-dev \
-                   pybind11-dev \
-                   python3-all \
-                   python3-numpy \
-                   python3-pip \
-                   python3-setuptools \
-                   python3-wheel \
-                   unzip \
-                   zlib1g-dev
+                     curl \
+                     git \
+                     unzip
+
+# Clone git repo
+git -c advice.detachedHead=false clone --depth 1 --branch $TENSORFLOWVER https://github.com/tensorflow/tensorflow.git
+
+# Download required apt packages
+apt-get install -y --no-install-recommends \
+                     build-essential \
+                     debhelper \
+                     pybind11-dev \
+                     zlib1g-dev &
+# Install supplemental python packages
+python3 -m pip install -U pybind11 &
+python3 -m pip install -U numpy &
+# Start downloading tensorflow dependencies whilst we wait for everything else to install to save some time
+bash tensorflow/tensorflow/lite/tools/make/download_dependencies.sh &
+wait
 
 # Create output directory
 mkdir -p $OUTDIR
 
 # Clone git repo
-git -c advice.detachedHead=false clone --depth 1 --branch $TENSORFLOWVER https://github.com/tensorflow/tensorflow.git
+# git -c advice.detachedHead=false clone --depth 1 --branch $TENSORFLOWVER https://github.com/tensorflow/tensorflow.git
 
 # Install supplemental python packages
-python3 -m pip install -U pybind11
+# https://itecnote.com/tecnote/python-parallel-pip-install/
+# cat << EOF | xargs --max-args=1 --max-procs=4 python3 -m pip install -U
+# pip
+# wheel
+# setuptools
+# EOF
+
+# cat << EOF | xargs --max-args=1 --max-procs=4 python3 -m pip install -U
+# pybind11
+# numpy
+# EOF
 
 # Build and export tflite wheel
 $GITDIR/build_pip_package.sh && \

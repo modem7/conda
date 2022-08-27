@@ -10,7 +10,7 @@ ARG GITDIR='/tensorflow/tensorflow/lite/tools'
 ###############
 # tflite-builder
 
-FROM debian:buster-slim AS tflite-builder
+FROM debian:bullseye-slim AS tflite-builder
 
 # System Env
 ENV PIP_ROOT_USER_ACTION='ignore'
@@ -110,7 +110,7 @@ EOF
 # The runtime-stage image; we can use Debian as the
 # base image since the Conda env also includes Python
 # for us.
-FROM debian:buster-slim AS runtime
+FROM debian:bullseye-slim AS runtime
 ARG TINI_VERSION='v0.19.0'
 ADD --link --chmod=755 https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 
