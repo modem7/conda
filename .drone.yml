@@ -22,8 +22,8 @@ steps:
     build_args: buildinfo-attrs=true
     cache_from: 
       - modem7/conda:latest
-      - modem7/conda:buildcache
-    cache_to: type=registry,mode=max,ref=modem7/conda:buildcache
+      # - modem7/conda:buildcache
+    # cache_to: type=registry,mode=max,ref=modem7/conda:buildcache
     dockerfile: tensorflow_lite/Dockerfile_quick
     context: tensorflow_lite/
     platforms: # if it doesn't work run docker run --privileged --rm tonistiigi/binfmt --install all
