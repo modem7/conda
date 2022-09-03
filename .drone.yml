@@ -24,7 +24,7 @@ steps:
       - modem7/conda:latest
       - modem7/conda:buildcache
     cache_to: type=registry,mode=max,ref=modem7/conda:buildcache
-    dockerfile: tensorflow_lite/Dockerfile
+    dockerfile: tensorflow_lite/Dockerfile_quick
     context: tensorflow_lite/
     platforms: # if it doesn't work run docker run --privileged --rm tonistiigi/binfmt --install all
       - linux/amd64

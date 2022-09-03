@@ -70,6 +70,7 @@ six=1.16.0
 sqlalchemy=1.4.32
 sqlite=3.33.0
 tk=8.6.8
+tranquilizer=0.8.0
 toml=0.10.2
 tornado=6.0.3
 traitlets=4.3.3
