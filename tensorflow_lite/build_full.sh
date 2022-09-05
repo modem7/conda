@@ -38,11 +38,21 @@ docker run --rm -it --init -v "$(pwd)":/data -e TENSORFLOWVER -e PUID -e PGID -e
 
 echo "### Initialising Tensorflow Docker image build..."
 
+<<<<<<< HEAD
 IMAGENAME='conda'
 IMAGETAG='test'
+=======
+IMGNAME='conda'
+IMGTAG='test'
+>>>>>>> 4ae2d9d (Update Dockerfile)
 DOCKERFILE='Dockerfile_quick'
+export DOCKER_BUILDKIT=1
 
+<<<<<<< HEAD
 DOCKER_BUILDKIT=1 docker build --build-arg BUILDKIT_INLINE_CACHE=1 -t $IMAGENAME:$IMAGETAG -f $DOCKERFILE .
+=======
+docker build --build-arg BUILDKIT_INLINE_CACHE=1 -t $IMGNAME:$IMGTAG -f $DOCKERFILE .
+>>>>>>> 4ae2d9d (Update Dockerfile)
 
 echo -e "\n###################"
 date -ud "@$SECONDS" "+Time taken to build TFLite image: %H:%M:%S"

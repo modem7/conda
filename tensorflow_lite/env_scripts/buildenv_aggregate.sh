@@ -45,6 +45,6 @@ mamba env export --from-history -n $CONDAENV > $ENVFILEAGG
 echo ""
 echo "### Created environment file in $ENVFILEAGG"
 echo ""
-date -ud "@$SECONDS" "+Time taken to run script: %H:%M:%S"
+date -ud "@$SECONDS" "+Time taken to create aggregate environment: %H:%M:%S"
 
 exit 0
