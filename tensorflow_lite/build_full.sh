@@ -40,10 +40,9 @@ echo "### Initialising Tensorflow Docker image build..."
 
 IMAGENAME='conda'
 IMAGETAG='test'
-DOCKER_BUILDKIT='1'
 DOCKERFILE='Dockerfile_quick'
 
-docker build --build-arg BUILDKIT_INLINE_CACHE=1 -t $IMAGENAME:$IMAGETAG -f $DOCKERFILE .
+DOCKER_BUILDKIT=1 docker build --build-arg BUILDKIT_INLINE_CACHE=1 -t $IMAGENAME:$IMAGETAG -f $DOCKERFILE .
 
 echo -e "\n###################"
 date -ud "@$SECONDS" "+Time taken to build TFLite image: %H:%M:%S"
