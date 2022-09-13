@@ -11,7 +11,7 @@ IMGNAME="python:3.7-slim-bullseye"
 # System Envs
 export PUID=$(id -u)
 export PGID=$(id -g)
-export TENSORFLOWVER='v2.4.1'
+export TENSORFLOWVER='v2.6.0'
 export TENSORFLOW_TARGET='native'
 export PYTHON='python3.7'
 export OUTDIR='/data/wheel/tflite'

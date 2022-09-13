@@ -1,11 +1,11 @@
-#nomkl
+nomkl
 conda-package-handling==1.8.1
 pybind11>=2.4.3
 python=3.7.4
 ################################## required for numpy nomkl openblas version
-#libopenblas=0.3.20
-#libgcc-ng=11.2.0
-#libstdcxx-ng=11.2.0
-#libgfortran5=11.2.0
-#libgfortran-ng=11.2.0
+libopenblas=0.3.20
+libgcc-ng=11.2.0
+libstdcxx-ng=11.2.0
+libgfortran5=11.2.0
+libgfortran-ng=11.2.0
 ##################################
