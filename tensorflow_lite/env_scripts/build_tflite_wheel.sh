@@ -26,7 +26,7 @@ apt-get install -y --no-install-recommends \
                      zlib1g-dev &
 # Install supplemental python packages
 python3 -m pip install -U pybind11 &
-python3 -m pip install -U numpy &
+python3 -m pip install -U numpy==1.19.2 &
 # Start downloading tensorflow dependencies whilst we wait for everything else to install to save some time
 bash tensorflow/tensorflow/lite/tools/make/download_dependencies.sh &
 wait
