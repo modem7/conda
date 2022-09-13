@@ -1,0 +1,17 @@
+ ##~~~~~~~~##
+ ##Services##
+ ##~~~~~~~~##
+services:
+
+  conda:
+    container_name: CondaTest
+    image: conda:test
+    build:
+      context: tensorflow_lite/
+      tags:
+        - conda:test
+      dockerfile: Dockerfile_quick
+    network_mode: "host"
+    restart: unless-stopped
+    #depends_on:
+    #  - rarara
