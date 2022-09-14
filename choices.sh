@@ -21,17 +21,17 @@ select opts in "${options[@]}"; do
         "Top")
             echo "Displaying running processes."
             docker compose top
-            break
+            #break
             ;;
         "List Running")
             echo "Displaying containers."
             docker compose ps
-            break
+            #break
             ;;
         "Clear Cache")
             echo "Clearing build cache."
             docker builder prune -af
-            break
+            #break
             ;;
 	"Quit")
 	    echo "Exiting script"
