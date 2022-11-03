@@ -1,0 +1,75 @@
+# syntax = docker/dockerfile-upstream:master-labs
+
+ARG CONDAENV='chiller'
+ARG PYTHONENV='3.7.4'
+ARG PYTHONDIR='python3.7'
+
+###############
+# envbuild
+
+FROM condaforge/mambaforge:4.13.0-1 AS envbuild
+
+# System Env
+ENV PIP_ROOT_USER_ACTION='ignore'
+
+# User Env
+ARG CONDAENV
+ARG PYTHONENV
+ARG PYTHONDIR
+ENV ENVFILE='environment_chiller.yml'
+
+# Install the package as normal and any packages in /wheel dir:
+COPY --link $ENVFILE /
+# Add additional packages to the wheel folder so it adds them at this step.
+COPY --link wheel/*.whl /
+
+RUN --mount=type=cache,id=$CONDAENV,target=/opt/conda/pkgs,sharing=locked \
+    --mount=type=cache,id=pip,target=/root/.cache/pip \
+    <<EOF
+    set -xe
+    mamba env create -f $ENVFILE
+    # Add additional packages to the wheel folder so it installs at this step.
+    mamba run -n $CONDAENV python3 -m pip install *.whl
+    # Use conda-pack to create a standalone environment in /venv
+    mamba install -y -c anaconda conda-pack
+    conda-pack -j -1 -n $CONDAENV -o /tmp/env.tar
+    mkdir /venv && cd /venv
+    tar xf /tmp/env.tar
+    rm /tmp/env.tar
+    # We've put venv in same path it'll be in final image, so now fix up paths
+    /venv/bin/conda-unpack
+EOF
+
+###############
+
+# The runtime-stage image; we can use Debian as the
+# base image since the Conda env also includes Python
+# for us.
+FROM debian:bullseye-slim AS runtime
+ARG TINI_VERSION='v0.19.0'
+ADD --link --chmod=755 https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+
+# Copy /venv from the previous stage:
+COPY --link --from=envbuild /venv /venv
+
+# Copy entrypoint script
+COPY --link --chmod=755 entrypoint.sh /entrypoint.sh
+
+# Uncomment this if you want the ps package which gives better process/troubleshooting visibility
+# RUN --mount=type=cache,id=aptcache,target=/var/cache/apt,sharing=locked \
+    # --mount=type=cache,id=libcache,target=/var/lib/apt,sharing=locked \
+    # <<EOF
+    # set -xe
+    # rm -fv /etc/apt/apt.conf.d/docker-clean
+    # echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+    # apt-get update
+    # apt-get --no-install-recommends install -y procps
+# EOF
+
+# When image is run, run the code with the environment activated:
+SHELL ["/bin/bash", "-c"]
+ENTRYPOINT ["/tini", "-g", "--", "/entrypoint.sh"]
+CMD [ "/bin/bash" ]
+
+# CMD ["/entrypoint.sh"]
+# ENTRYPOINT ["/entrypoint.sh"]
