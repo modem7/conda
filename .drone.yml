@@ -20,7 +20,7 @@ steps:
     no_cache: false
     build_args: BUILDKIT_INLINE_CACHE=1 # enabling this causes an implicit cache-to: inline
     cache_from: 
-      - modem7/conda:conda
+      - modem7/conda:tflite-latest
       # - modem7/conda:buildcache
     # cache_to: type=registry,mode=max,ref=modem7/conda:buildcache
     dockerfile: tensorflow_lite/Dockerfile_quick
@@ -32,7 +32,8 @@ steps:
     password:
       from_secret: docker_password
     tags:
-      - conda
+      - tflite-1.0
+      - tflite-latest
 
 - name: slack
   image: themaz/drone-slack
@@ -68,7 +69,7 @@ steps:
     no_cache: false
     build_args: BUILDKIT_INLINE_CACHE=1 # enabling this causes an implicit cache-to: inline
     cache_from: 
-      - modem7/conda:chiller
+      - modem7/conda:scikitlearn-latest
       # - modem7/conda:buildcache
     # cache_to: type=registry,mode=max,ref=modem7/conda:buildcache
     dockerfile: chiller/Dockerfile_quick
@@ -80,7 +81,8 @@ steps:
     password:
       from_secret: docker_password
     tags:
-      - chiller
+      - scikitlearn-1.0
+      - scikitlearn-latest
 
 - name: slack
   image: themaz/drone-slack
