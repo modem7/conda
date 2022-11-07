@@ -2,14 +2,14 @@
 
 kind: pipeline
 type: docker
-name: CondaBuild
+name: TFLiteBuild
 
 platform:
   os: linux
   arch: amd64
   
 steps:
-- name: CondaBuild
+- name: TFLiteBuild
   image: thegeeklab/drone-docker-buildx
   privileged: true
 
@@ -32,7 +32,7 @@ steps:
     password:
       from_secret: docker_password
     tags:
-      - tflite-1.0
+      - tflite-1.0.0
       - tflite-latest
 
 - name: slack
@@ -51,14 +51,14 @@ trigger:
 
 kind: pipeline
 type: docker
-name: ChillerBuild
+name: ScikitLearnBuild
 
 platform:
   os: linux
   arch: amd64
   
 steps:
-- name: ChillerBuild
+- name: ScikitLearnBuild
   image: thegeeklab/drone-docker-buildx
   privileged: true
 
@@ -81,7 +81,7 @@ steps:
     password:
       from_secret: docker_password
     tags:
-      - scikitlearn-1.0
+      - scikitlearn-1.0.0
       - scikitlearn-latest
 
 - name: slack
